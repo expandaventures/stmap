@@ -1,0 +1,27 @@
+{
+  "name": "stmap",
+  "version": "1.0.0",
+  "description": "Leaflet map with SinTrafico layers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gamda/stmap.git"
+  },
+  "keywords": [
+    "sintrafico",
+    "leaflet"
+  ],
+  "author": "Daniel Garcia",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/gamda/stmap/issues"
+  },
+  "homepage": "https://github.com/gamda/stmap#readme",
+  "dependencies": {
+    "leaflet": "^1.0.3",
+    "leaflet.markercluster": "^1.0.3"
+  }
+}
