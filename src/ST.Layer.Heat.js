@@ -81,7 +81,7 @@ var layer = L.Layer.extend({
         if ('colorOn' in options)
             newOptions.colorOn = options.colorOn;
         if ('colorOff' in options)
-            newOptions.colorOn = options.colorOff;
+            newOptions.colorOff = options.colorOff;
         if (options.icon)
             newOptions.icon = options.icon;
         if ('buttonPosition' in options)
