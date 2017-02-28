@@ -13268,7 +13268,7 @@ var incident = Layers.extend({
         apiKey: '',
         callback: null,
         imgPath: 'node_modules/stmap/img/icons/',
-        initialVisibility: false,
+        initialVisibility: true,
         tableDiv: null,
         // ST.Control.Layers defaults:
         //     position: 'topright',
@@ -13414,6 +13414,7 @@ var pois = Layers.extend({
     options: {
         apiKey: '',
         imgPath: 'node_modules/stmap/img/icons/',
+        initialVisibility: true,
         // ST.Control.Layers defaults:
         //     position: 'topright',
         //     icon: 'podcast',
@@ -13427,9 +13428,11 @@ var pois = Layers.extend({
             options.imgPath = 'node_modules/stmap/img/icons/';
         L.setOptions(this, options);
         Layers.prototype.initialize.call(this, null, null, options);
+        console.log('init', this.options)
     },
 
     onAdd: function (map) {
+        console.log('add', this.options)
         var container = Layers.prototype.onAdd.call(this, map);
         this._clusters = {};
         this._getPois(map);  // call after this._map has been set
@@ -13485,7 +13488,8 @@ var pois = Layers.extend({
             }
             else {
                 // First time adding
-                cluster.addTo(this._map);
+                if (this.options.initialVisibility)
+                    cluster.addTo(this._map);  // This turns all layers on by default
                 this.addOverlay(cluster, poiType);
             }
             this._clusters[poiType] = cluster;
@@ -13988,9 +13992,12 @@ var _Map = L.Map.extend({
         speedEnabled: true,
         speedVisible: false,
         //     speedIcon: 'dashboard',
-        incidentEnabled: true,
-        incidentVisible: false,
-        //     incidentIcon: 'exclamation-triangle',
+        incidentsEnabled: true,
+        incidentsVisible: false,
+        //     incidentsIcon: 'exclamation-triangle',
+        poisEnabled: true,
+        poisVisible: false,
+        //     poisIcon: 'map-marker',
         colorOn: '#337AB7',
         colorOff: '#5F7C8A',
     },
@@ -14006,8 +14013,7 @@ var _Map = L.Map.extend({
         this._congestion(this.options);
         this._speed(this.options);
         this._incidents(this.options);
-        this._poisControl = pois({apiKey: this.options.apiKey}).addTo(this);
-        this.on('dragend zoomend', L.bind(this._poisControl.update, this._poisControl));
+        this._pois(this.options);
         return this;
     },
 
@@ -14042,6 +14048,20 @@ var _Map = L.Map.extend({
         if ('incidentsIcon' in options)
             incidentsOptions.icon = options.incidentsIcon;
         this._incidentsLayer = incident(incidentsOptions).addTo(this);
+    },
+
+    _pois: function (options) {
+        if (!options.poisEnabled)
+            return;
+        var poisOptions = this._baseOptions(options);
+        poisOptions.initialVisibility = options.poisVisible;
+        if ('colorOff' in options)
+            poisOptions.color = options.colorOff;
+        if ('poisIcon' in options)
+            poisOptions.icon = options.poisIcon;
+        console.log('map', poisOptions);
+        this._poisLayer = pois(poisOptions).addTo(this);
+        this.on('dragend zoomend', L.bind(this._poisLayer.update, this._poisLayer));
     },
 
     _baseOptions: function (options) {

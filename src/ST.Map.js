@@ -18,9 +18,12 @@ var _Map = L.Map.extend({
         speedEnabled: true,
         speedVisible: false,
         //     speedIcon: 'dashboard',
-        incidentEnabled: true,
-        incidentVisible: false,
-        //     incidentIcon: 'exclamation-triangle',
+        incidentsEnabled: true,
+        incidentsVisible: false,
+        //     incidentsIcon: 'exclamation-triangle',
+        poisEnabled: true,
+        poisVisible: false,
+        //     poisIcon: 'map-marker',
         colorOn: '#337AB7',
         colorOff: '#5F7C8A',
     },
@@ -36,8 +39,7 @@ var _Map = L.Map.extend({
         this._congestion(this.options);
         this._speed(this.options);
         this._incidents(this.options);
-        this._poisControl = pois({apiKey: this.options.apiKey}).addTo(this);
-        this.on('dragend zoomend', L.bind(this._poisControl.update, this._poisControl));
+        this._pois(this.options);
         return this;
     },
 
@@ -72,6 +74,19 @@ var _Map = L.Map.extend({
         if ('incidentsIcon' in options)
             incidentsOptions.icon = options.incidentsIcon;
         this._incidentsLayer = incident(incidentsOptions).addTo(this);
+    },
+
+    _pois: function (options) {
+        if (!options.poisEnabled)
+            return;
+        var poisOptions = this._baseOptions(options);
+        poisOptions.initialVisibility = options.poisVisible;
+        if ('colorOff' in options)
+            poisOptions.color = options.colorOff;
+        if ('poisIcon' in options)
+            poisOptions.icon = options.poisIcon;
+        this._poisLayer = pois(poisOptions).addTo(this);
+        this.on('dragend zoomend', L.bind(this._poisLayer.update, this._poisLayer));
     },
 
     _baseOptions: function (options) {
