@@ -13950,7 +13950,7 @@ var layer = L.Layer.extend({
         if ('colorOn' in options)
             newOptions.colorOn = options.colorOn;
         if ('colorOff' in options)
-            newOptions.colorOn = options.colorOff;
+            newOptions.colorOff = options.colorOff;
         if (options.icon)
             newOptions.icon = options.icon;
         if ('buttonPosition' in options)
@@ -13983,6 +13983,9 @@ var _Map = L.Map.extend({
         congestionEnabled: true,
         congestionVisible: false,
         //     congestionIcon: 'thermometer-empty',
+        speedEnabled: true,
+        speedVisible: false,
+        //     speedIcon: 'dashboard',
         colorOn: '#337AB7',
         colorOff: '#5F7C8A',
     },
@@ -13995,11 +13998,8 @@ var _Map = L.Map.extend({
     setView: function (center, zoom, options) {
         console.log(this.options);
         L.Map.prototype.setView.call(this, center, zoom, options);
-        this._congestionLayer = this._congestion(this.options);
-        this._speedLayer = speed({
-            apiKey: this.options.apiKey,
-            visible: false,
-        });
+        this._congestion(this.options);
+        this._speed(this.options);
         this._congestionLayer.addTo(this);
         this._speedLayer.addTo(this);
         this._incidentControl = incident({apiKey: this.options.apiKey}).addTo(this);
@@ -14011,7 +14011,7 @@ var _Map = L.Map.extend({
 
     _congestion: function (options) {
         if (!options.congestionEnabled)
-            return null;
+            return;
         var congestionOptions = {
             apiKey: options.apiKey,
             visible: options.congestionVisible,
@@ -14026,7 +14026,27 @@ var _Map = L.Map.extend({
             congestionOptions.position = options.buttonPosition;
         if ('legendWidth' in options)
             congestionOptions.width = options.legendWidth;
-        return congestion(congestionOptions);
+        this._congestionLayer = congestion(congestionOptions).addTo(this);
+    },
+
+    _speed: function (options) {
+        if (!options.speedEnabled)
+            return;
+        var speedOptions = {
+            apiKey: options.apiKey,
+            visible: options.speedVisible,
+        };
+        if ('colorOn' in options)
+            speedOptions.colorOn = options.colorOn;
+        if ('colorOff' in options)
+            speedOptions.colorOff = options.colorOff;
+        if ('speedIcon' in options)
+            speedOptions.icon = options.speedIcon;
+        if ('buttonPosition' in options)
+            speedOptions.position = options.buttonPosition;
+        if ('legendWidth' in options)
+            speedOptions.width = options.legendWidth;
+        this._speedLayer = speed(speedOptions).addTo(this);
     }
 });  // NOTE: Map() is a JS(?) function
 
