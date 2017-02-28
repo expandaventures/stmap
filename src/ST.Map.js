@@ -34,37 +34,36 @@ var _Map = L.Map.extend({
     },
 
     setView: function (center, zoom, options) {
-        console.log(this.options);
         L.Map.prototype.setView.call(this, center, zoom, options);
-        this._congestion(this.options);
-        this._speed(this.options);
-        this._incidents(this.options);
-        this._pois(this.options);
+        this._initCongestion(this.options);
+        this._initSpeed(this.options);
+        this._initIncidents(this.options);
+        this._initPois(this.options);
         return this;
     },
 
-    _congestion: function (options) {
+    _initCongestion: function (options) {
         if (!options.congestionEnabled)
             return;
         var congestionOptions = this._baseOptions(options);
         congestionOptions.visible = options.congestionVisible;
         if ('congestionIcon' in options)
             congestionOptions.icon = options.congestionIcon;
-        this._congestionLayer = congestion(congestionOptions).addTo(this);
+        this._congestion = congestion(congestionOptions).addTo(this);
     },
 
-    _speed: function (options) {
+    _initSpeed: function (options) {
         if (!options.speedEnabled)
             return;
         var speedOptions = this._baseOptions(options);
         speedOptions.visible = options.speedVisible;
         if ('speedIcon' in options)
             speedOptions.icon = options.speedIcon;
-        this._speedLayer = speed(speedOptions).addTo(this);
-        this.on('dragend zoomend', L.bind(this._speedLayer.update, this._speedLayer));
+        this._speed = speed(speedOptions).addTo(this);
+        this.on('dragend zoomend', L.bind(this._speed.update, this._speed));
     },
 
-    _incidents: function (options) {
+    _initIncidents: function (options) {
         if (!options.incidentsEnabled)
             return;
         var incidentsOptions = this._baseOptions(options);
@@ -73,10 +72,10 @@ var _Map = L.Map.extend({
             incidentsOptions.color = options.colorOff;
         if ('incidentsIcon' in options)
             incidentsOptions.icon = options.incidentsIcon;
-        this._incidentsLayer = incident(incidentsOptions).addTo(this);
+        this._incidents = incident(incidentsOptions).addTo(this);
     },
 
-    _pois: function (options) {
+    _initPois: function (options) {
         if (!options.poisEnabled)
             return;
         var poisOptions = this._baseOptions(options);
@@ -85,8 +84,8 @@ var _Map = L.Map.extend({
             poisOptions.color = options.colorOff;
         if ('poisIcon' in options)
             poisOptions.icon = options.poisIcon;
-        this._poisLayer = pois(poisOptions).addTo(this);
-        this.on('dragend zoomend', L.bind(this._poisLayer.update, this._poisLayer));
+        this._pois = pois(poisOptions).addTo(this);
+        this.on('dragend zoomend', L.bind(this._pois.update, this._pois));
     },
 
     _baseOptions: function (options) {
