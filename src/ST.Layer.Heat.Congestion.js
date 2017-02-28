@@ -17,11 +17,8 @@ var congestion = Heat.extend({
         //     legendPosition: 'bottomright',
         //     width: '300px',
         // ST.Control.ToggleButton
-        //     callback: null,
-        //     callbackTarget: null,
-        //     position: 'topright',
-        //     initialValue: true,
         icon: 'thermometer-empty',
+        //     buttonPosition: 'topright',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
     },
