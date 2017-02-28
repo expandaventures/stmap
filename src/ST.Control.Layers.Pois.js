@@ -7,6 +7,7 @@ var pois = Layers.extend({
     options: {
         apiKey: '',
         imgPath: 'node_modules/stmap/img/icons/',
+        initialVisibility: true,
         // ST.Control.Layers defaults:
         //     position: 'topright',
         //     icon: 'podcast',
@@ -78,7 +79,8 @@ var pois = Layers.extend({
             }
             else {
                 // First time adding
-                cluster.addTo(this._map);
+                if (this.options.initialVisibility)
+                    cluster.addTo(this._map);  // This turns all layers on by default
                 this.addOverlay(cluster, poiType);
             }
             this._clusters[poiType] = cluster;
