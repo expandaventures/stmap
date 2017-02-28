@@ -14014,40 +14014,20 @@ var _Map = L.Map.extend({
     _congestion: function (options) {
         if (!options.congestionEnabled)
             return;
-        var congestionOptions = {
-            apiKey: options.apiKey,
-            visible: options.congestionVisible,
-        };
-        if ('colorOn' in options)
-            congestionOptions.colorOn = options.colorOn;
-        if ('colorOff' in options)
-            congestionOptions.colorOff = options.colorOff;
+        var congestionOptions = this._baseOptions(options);
+        congestionOptions.visible = options.congestionVisible;
         if ('congestionIcon' in options)
             congestionOptions.icon = options.congestionIcon;
-        if ('buttonPosition' in options)
-            congestionOptions.position = options.buttonPosition;
-        if ('legendWidth' in options)
-            congestionOptions.width = options.legendWidth;
         this._congestionLayer = congestion(congestionOptions).addTo(this);
     },
 
     _speed: function (options) {
         if (!options.speedEnabled)
             return;
-        var speedOptions = {
-            apiKey: options.apiKey,
-            visible: options.speedVisible,
-        };
-        if ('colorOn' in options)
-            speedOptions.colorOn = options.colorOn;
-        if ('colorOff' in options)
-            speedOptions.colorOff = options.colorOff;
+        var speedOptions = this._baseOptions(options);
+        speedOptions.visible = options.speedVisible;
         if ('speedIcon' in options)
             speedOptions.icon = options.speedIcon;
-        if ('buttonPosition' in options)
-            speedOptions.position = options.buttonPosition;
-        if ('legendWidth' in options)
-            speedOptions.width = options.legendWidth;
         this._speedLayer = speed(speedOptions).addTo(this);
         this.on('dragend zoomend', L.bind(this._speedLayer.update, this._speedLayer));
     },
@@ -14055,17 +14035,28 @@ var _Map = L.Map.extend({
     _incidents: function (options) {
         if (!options.incidentsEnabled)
             return;
-        var incidentsOptions = {
-            apiKey: options.apiKey,
-            initialVisibility: options.incidentsVisible,
-        };
+        var incidentsOptions = this._baseOptions(options);
+        incidentsOptions.initialVisibility = options.incidentsVisible;
         if ('colorOff' in options)
             incidentsOptions.color = options.colorOff;
         if ('incidentsIcon' in options)
             incidentsOptions.icon = options.incidentsIcon;
-        if ('buttonPosition' in options)
-            incidentsOptions.position = options.buttonPosition;
         this._incidentsLayer = incident(incidentsOptions).addTo(this);
+    },
+
+    _baseOptions: function (options) {
+        var base = {
+            apiKey: options.apiKey,
+        };
+        if ('colorOn' in options)
+            base.colorOn = options.colorOn;
+        if ('colorOff' in options)
+            base.colorOff = options.colorOff;
+        if ('buttonPosition' in options)
+            base.position = options.buttonPosition;
+        if ('legendWidth' in options)
+            base.width = options.legendWidth;
+        return base;
     },
 });  // NOTE: Map() is a JS(?) function
 
