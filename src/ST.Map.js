@@ -18,6 +18,9 @@ var _Map = L.Map.extend({
         speedEnabled: true,
         speedVisible: false,
         //     speedIcon: 'dashboard',
+        incidentEnabled: true,
+        incidentVisible: false,
+        //     incidentIcon: 'exclamation-triangle',
         colorOn: '#337AB7',
         colorOff: '#5F7C8A',
     },
@@ -32,11 +35,8 @@ var _Map = L.Map.extend({
         L.Map.prototype.setView.call(this, center, zoom, options);
         this._congestion(this.options);
         this._speed(this.options);
-        this._congestionLayer.addTo(this);
-        this._speedLayer.addTo(this);
-        this._incidentControl = incident({apiKey: this.options.apiKey}).addTo(this);
+        this._incidents(this.options);
         this._poisControl = pois({apiKey: this.options.apiKey}).addTo(this);
-        this.on('dragend zoomend', L.bind(this._speedLayer.update, this._speedLayer));
         this.on('dragend zoomend', L.bind(this._poisControl.update, this._poisControl));
         return this;
     },
@@ -79,7 +79,24 @@ var _Map = L.Map.extend({
         if ('legendWidth' in options)
             speedOptions.width = options.legendWidth;
         this._speedLayer = speed(speedOptions).addTo(this);
-    }
+        this.on('dragend zoomend', L.bind(this._speedLayer.update, this._speedLayer));
+    },
+
+    _incidents: function (options) {
+        if (!options.incidentsEnabled)
+            return;
+        var incidentsOptions = {
+            apiKey: options.apiKey,
+            initialVisibility: options.incidentsVisible,
+        };
+        if ('colorOff' in options)
+            incidentsOptions.color = options.colorOff;
+        if ('incidentsIcon' in options)
+            incidentsOptions.icon = options.incidentsIcon;
+        if ('buttonPosition' in options)
+            incidentsOptions.position = options.buttonPosition;
+        this._incidentsLayer = incident(incidentsOptions).addTo(this);
+    },
 });  // NOTE: Map() is a JS(?) function
 
 module.exports = {
