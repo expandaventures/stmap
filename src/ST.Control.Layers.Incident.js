@@ -5,9 +5,10 @@ var incident = Layers.extend({
 
     options: {
         apiKey: '',
-        tableDiv: null,
         callback: null,
         imgPath: 'node_modules/stmap/img/icons/',
+        initialVisibility: false,
+        tableDiv: null,
         // ST.Control.Layers defaults:
         //     position: 'topright',
         //     icon: 'podcast',
@@ -95,8 +96,9 @@ var incident = Layers.extend({
         // Add to map
         for (var category in markers) {
             var newOverlay = L.layerGroup(markers[category]);
-            newOverlay.addTo(this._map);  // This turns all layers on by default
             this.addOverlay(newOverlay, category);
+            if (this.options.initialVisibility)
+                newOverlay.addTo(this._map);  // This turns all layers on by default
         }
         // Insert table
         if (this.options.tableDiv) {
