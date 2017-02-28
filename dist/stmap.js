@@ -13680,11 +13680,8 @@ var congestion = Heat.extend({
         //     legendPosition: 'bottomright',
         //     width: '300px',
         // ST.Control.ToggleButton
-        //     callback: null,
-        //     callbackTarget: null,
-        //     position: 'topright',
-        //     initialValue: true,
         icon: 'thermometer-empty',
+        //     buttonPosition: 'topright',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
     },
@@ -13789,7 +13786,7 @@ var layer = L.Layer.extend({
         if ('colorOn' in options)
             newOptions.colorOn = options.colorOn;
         if ('colorOff' in options)
-            newOptions.colorOn = options.colorOff;
+            newOptions.colorOff = options.colorOff;
         if (options.icon)
             newOptions.icon = options.icon;
         if ('buttonPosition' in options)
@@ -13979,6 +13976,13 @@ var _Map = L.Map.extend({
 
     options: {
         apiKey: '',
+        // General
+        //     buttonPosition: 'topright'
+             legendWidth: '600px',
+        // Layers
+        congestionEnabled: true,
+        congestionVisible: false,
+        //     congestionIcon: 'thermometer-empty',
         colorOn: '#337AB7',
         colorOff: '#5F7C8A',
     },
@@ -13989,11 +13993,9 @@ var _Map = L.Map.extend({
     },
 
     setView: function (center, zoom, options) {
+        console.log(this.options);
         L.Map.prototype.setView.call(this, center, zoom, options);
-        this._congestionLayer = congestion({
-            apiKey: this.options.apiKey,
-            visible: false,
-        });
+        this._congestionLayer = this._congestion(this.options);
         this._speedLayer = speed({
             apiKey: this.options.apiKey,
             visible: false,
@@ -14005,6 +14007,26 @@ var _Map = L.Map.extend({
         this.on('dragend zoomend', L.bind(this._speedLayer.update, this._speedLayer));
         this.on('dragend zoomend', L.bind(this._poisControl.update, this._poisControl));
         return this;
+    },
+
+    _congestion: function (options) {
+        if (!options.congestionEnabled)
+            return null;
+        var congestionOptions = {
+            apiKey: options.apiKey,
+            visible: options.congestionVisible,
+        };
+        if ('colorOn' in options)
+            congestionOptions.colorOn = options.colorOn;
+        if ('colorOff' in options)
+            congestionOptions.colorOff = options.colorOff;
+        if ('congestionIcon' in options)
+            congestionOptions.icon = options.congestionIcon;
+        if ('buttonPosition' in options)
+            congestionOptions.position = options.buttonPosition;
+        if ('legendWidth' in options)
+            congestionOptions.width = options.legendWidth;
+        return congestion(congestionOptions);
     }
 });  // NOTE: Map() is a JS(?) function
 
