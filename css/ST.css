@@ -8,6 +8,11 @@
     width: 100%;
 }
 
+.leaflet-bottom.leaflet-right .leaflet-control {
+  display: inline-block;
+  float: none;
+}
+
 /* clusters customization */
 .st-poi-cluster {
     color: #FFFFFF;
