@@ -7,7 +7,7 @@ var incident = Layers.extend({
         apiKey: '',
         callback: null,
         imgPath: 'node_modules/stmap/img/icons/',
-        initialVisibility: false,
+        initialVisibility: true,
         tableDiv: null,
         // ST.Control.Layers defaults:
         //     position: 'topright',
