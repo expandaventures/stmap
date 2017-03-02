@@ -20,7 +20,16 @@ var municipalities = L.Layer.extend({
         if (options.icon == undefined)
             options.icon = 'map';
         this._visible = this.options.visible;
-        this._layer = L.geoJSON(test);
+        var that = this;
+        this._layer = L.geoJSON(test, {
+            style: this._style,
+            onEachFeature: function (feature, layer) {
+                layer.on({
+                    mouseover: that._inFeature,
+                    mouseout: function (e) {that._layer.resetStyle(e.target);},
+                });
+            }
+        });
         this._button = toggleButton(this._buttonOptions(options));
     },
 
@@ -44,10 +53,35 @@ var municipalities = L.Layer.extend({
         map.removeLayer(this._layer);
     },
 
+    _style: function (feature) {
+        return {
+            fillColor: '#000000',
+            weight: 2,
+            opacity: 1,
+            color: '#5F7C8A',
+            fillOpacity: 0.0
+        };
+    },
+
+    _inFeature: function (e) {
+        console.log(e.target.feature.properties.mun_name);
+        var layer = e.target;
+
+        layer.setStyle({
+            weight: 5,
+            color: '#337AB7',
+            fillOpacity: 0.0
+        });
+        layer.bindPopup(e.target.feature.properties.mun_name).openPopup();
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+    },
+
     // Button methods
     _buttonClicked: function (me, visible) {
         me._visible = !me._visible;
-        console.log(me._visible);
         if (visible)
             me._show(me._map);
         else
