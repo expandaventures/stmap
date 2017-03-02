@@ -1,6 +1,7 @@
 'use strict';
 var {speed} = require('./ST.Layer.WMS.Speed.js')
 var {service} = require('./ST.Layer.WMS.Service.js')
+var {municipalities} = require('./ST.Layer.Municipalities.js')
 var {excessYear} = require('./ST.Layer.WMS.ExcessYear.js')
 var {congestion} = require('./ST.Layer.Heat.Congestion.js')
 var {incident} = require('./ST.Control.Layers.Incident.js')
@@ -32,6 +33,9 @@ var _Map = L.Map.extend({
         poisEnabled: true,
         poisVisible: false,
         //     poisIcon: 'map-marker',
+        municipalitiesEnabled: true,
+        municipalitiesVisible: false,
+        //     municipalitiesIcon: 'map',
         colorOn: '#337AB7',
         colorOff: '#5F7C8A',
     },
@@ -39,16 +43,22 @@ var _Map = L.Map.extend({
     initialize: function (div, options) {
         L.setOptions(this, options);
         L.Map.prototype.initialize.call(this, div, options);
+        this._firstLoad = true;
     },
 
     setView: function (center, zoom, options) {
         L.Map.prototype.setView.call(this, center, zoom, options);
-        this._initCongestion(this.options);
-        this._initSpeed(this.options);
-        this._initService(this.options);
-        this._initExcessYear(this.options);
-        this._initIncidents(this.options);
-        this._initPois(this.options);
+        if (this._firstLoad) {
+            // order in which they are called determines order of buttons
+            this._initMunicipalities(this.options);
+            this._initCongestion(this.options);
+            this._initSpeed(this.options);
+            this._initService(this.options);
+            this._initExcessYear(this.options);
+            this._initIncidents(this.options);
+            this._initPois(this.options);
+        }
+        this._firstLoad = false;
         return this;
     },
 
@@ -118,6 +128,16 @@ var _Map = L.Map.extend({
             poisOptions.icon = options.poisIcon;
         this._pois = pois(poisOptions).addTo(this);
         this.on('dragend zoomend', L.bind(this._pois.update, this._pois));
+    },
+
+    _initMunicipalities: function (options) {
+        if (!options.municipalitiesEnabled)
+            return;
+        var municipalitiesOptions = this._baseOptions(options);
+        municipalitiesOptions.visible = options.municipalitiesVisible;
+        if ('municipalitiesIcon' in options)
+            municipalitiesOptions.icon = options.municipalitiesIcon;
+        this._municipalities = municipalities(municipalitiesOptions).addTo(this);
     },
 
     _baseOptions: function (options) {
