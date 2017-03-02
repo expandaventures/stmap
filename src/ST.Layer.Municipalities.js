@@ -64,7 +64,6 @@ var municipalities = L.Layer.extend({
     },
 
     _inFeature: function (e) {
-        console.log(e.target.feature.properties.mun_name);
         var layer = e.target;
 
         layer.setStyle({
