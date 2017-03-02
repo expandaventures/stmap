@@ -1,5 +1,6 @@
 'use strict';
 var {speed} = require('./ST.Layer.WMS.Speed.js')
+var {service} = require('./ST.Layer.WMS.Service.js')
 var {excessYear} = require('./ST.Layer.WMS.ExcessYear.js')
 var {congestion} = require('./ST.Layer.Heat.Congestion.js')
 var {incident} = require('./ST.Control.Layers.Incident.js')
@@ -19,6 +20,9 @@ var _Map = L.Map.extend({
         speedEnabled: true,
         speedVisible: false,
         //     speedIcon: 'dashboard',
+        serviceEnabled: true,
+        serviceVisible: false,
+        //     serviceIcon: 'dashboard',
         excessEnabled: true,
         excessVisible: false,
         //     excessIcon: 'dashboard',
@@ -41,6 +45,7 @@ var _Map = L.Map.extend({
         L.Map.prototype.setView.call(this, center, zoom, options);
         this._initCongestion(this.options);
         this._initSpeed(this.options);
+        this._initService(this.options);
         this._initExcessYear(this.options);
         this._initIncidents(this.options);
         this._initPois(this.options);
@@ -66,6 +71,17 @@ var _Map = L.Map.extend({
             speedOptions.icon = options.speedIcon;
         this._speed = speed(speedOptions).addTo(this);
         this.on('dragend zoomend', L.bind(this._speed.update, this._speed));
+    },
+
+    _initService: function (options) {
+        if (!options.serviceEnabled)
+            return;
+        var serviceOptions = this._baseOptions(options);
+        serviceOptions.visible = options.serviceVisible;
+        if ('serviceIcon' in options)
+            serviceOptions.icon = options.serviceIcon;
+        this._service = service(serviceOptions).addTo(this);
+        this.on('dragend zoomend', L.bind(this._service.update, this._service));
     },
 
     _initExcessYear: function (options) {
