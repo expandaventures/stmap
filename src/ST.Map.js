@@ -1,5 +1,6 @@
 'use strict';
 var {speed} = require('./ST.Layer.WMS.Speed.js')
+var {excessYear} = require('./ST.Layer.WMS.ExcessYear.js')
 var {congestion} = require('./ST.Layer.Heat.Congestion.js')
 var {incident} = require('./ST.Control.Layers.Incident.js')
 var {pois} = require('./ST.Control.Layers.Pois.js')
@@ -18,6 +19,9 @@ var _Map = L.Map.extend({
         speedEnabled: true,
         speedVisible: false,
         //     speedIcon: 'dashboard',
+        excessEnabled: true,
+        excessVisible: false,
+        //     excessIcon: 'dashboard',
         incidentsEnabled: true,
         incidentsVisible: false,
         //     incidentsIcon: 'exclamation-triangle',
@@ -37,6 +41,7 @@ var _Map = L.Map.extend({
         L.Map.prototype.setView.call(this, center, zoom, options);
         this._initCongestion(this.options);
         this._initSpeed(this.options);
+        this._initExcessYear(this.options);
         this._initIncidents(this.options);
         this._initPois(this.options);
         return this;
@@ -61,6 +66,17 @@ var _Map = L.Map.extend({
             speedOptions.icon = options.speedIcon;
         this._speed = speed(speedOptions).addTo(this);
         this.on('dragend zoomend', L.bind(this._speed.update, this._speed));
+    },
+
+    _initExcessYear: function (options) {
+        if (!options.excessEnabled)
+            return;
+        var excessOptions = this._baseOptions(options);
+        excessOptions.visible = options.excessVisible;
+        if ('excessIcon' in options)
+            excessOptions.icon = options.excessIcon;
+        this._excess = excessYear(excessOptions).addTo(this);
+        this.on('dragend zoomend', L.bind(this._excess.update, this._excess));
     },
 
     _initIncidents: function (options) {

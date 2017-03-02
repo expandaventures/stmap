@@ -13,14 +13,17 @@ var l = L.Control.extend({
     },
 
     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'logo-container');
-        container.style.width = this.options.width;
-        container.innerHTML = '<div class="row">'
-                            +   '<div class="col-md-12">'
-                            +     '<img class="logo" src="' + this.options.imgSrc + '">'
-                            +   '</div>'
-                            + '</div>';
-        return container;
+        if (this.options.imgSrc) {
+            var container = L.DomUtil.create('div', 'logo-container');
+            container.style.width = this.options.width;
+            container.innerHTML = '<div class="row">'
+                                +   '<div class="col-md-12">'
+                                +     '<img class="logo" src="' + this.options.imgSrc + '">'
+                                +   '</div>'
+                                + '</div>';
+            return container;
+        }
+        return L.DomUtil.create('div', 'logo-container');
     },
 
     onRemove: function (map) {

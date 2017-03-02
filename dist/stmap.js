@@ -13582,14 +13582,17 @@ var l = L.Control.extend({
     },
 
     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'logo-container');
-        container.style.width = this.options.width;
-        container.innerHTML = '<div class="row">'
-                            +   '<div class="col-md-12">'
-                            +     '<img class="logo" src="' + this.options.imgSrc + '">'
-                            +   '</div>'
-                            + '</div>';
-        return container;
+        if (this.options.imgSrc) {
+            var container = L.DomUtil.create('div', 'logo-container');
+            container.style.width = this.options.width;
+            container.innerHTML = '<div class="row">'
+                                +   '<div class="col-md-12">'
+                                +     '<img class="logo" src="' + this.options.imgSrc + '">'
+                                +   '</div>'
+                                + '</div>';
+            return container;
+        }
+        return L.DomUtil.create('div', 'logo-container');
     },
 
     onRemove: function (map) {
@@ -13820,7 +13823,45 @@ module.exports = {
         return new layer(options);
     },
 };
-},{"./ST.Control.Legend.js":6,"./ST.Control.toggleButton.js":7,"./lib/leaflet-heat.js":14}],10:[function(require,module,exports){
+},{"./ST.Control.Legend.js":6,"./ST.Control.toggleButton.js":7,"./lib/leaflet-heat.js":15}],10:[function(require,module,exports){
+'use strict';
+var {WMS} = require('./ST.Layer.WMS.js')
+
+var excess = WMS.extend({
+
+    options: {
+        // ST.Layer.WMS
+        visible: true,
+        //     callback: null,
+        //     callbackTarget: null,
+        //     url: [set on initialize because it uses apiKey],
+        // ST.Control.Legend
+        //     imgSrc: null,
+        //     legendPosition: 'bottomright',
+        //     width: '300px',
+        // ST.Control.ToggleButton
+        icon: 'bolt',
+        //     buttonPosition: 'topright',
+        //     colorOn: '#337AB7',
+        //     colorOff: '#5F7C8A',
+    },
+
+    initialize: function (options) {
+        options.url = 'http://tile.sintrafico.com/wms/segment_excesses.png';
+        if (options.icon == undefined)
+            options.icon = 'bolt';
+        L.setOptions(this, options);
+        WMS.prototype.initialize.call(this, options);
+    },
+});
+
+module.exports = {
+    ExcessYear: excess,
+    excessYear: function(options) {
+        return new excess(options);
+    },
+};
+},{"./ST.Layer.WMS.js":12}],11:[function(require,module,exports){
 'use strict';
 var {WMS} = require('./ST.Layer.WMS.js')
 
@@ -13858,7 +13899,7 @@ module.exports = {
         return new speed(options);
     },
 };
-},{"./ST.Layer.WMS.js":11}],11:[function(require,module,exports){
+},{"./ST.Layer.WMS.js":12}],12:[function(require,module,exports){
 'use strict';
 var {legend} = require('./ST.Control.Legend.js')
 var {toggleButton} = require('./ST.Control.toggleButton.js')
@@ -13969,9 +14010,10 @@ module.exports = {
         return new layer(options);
     },
 };
-},{"./ST.Control.Legend.js":6,"./ST.Control.toggleButton.js":7}],12:[function(require,module,exports){
+},{"./ST.Control.Legend.js":6,"./ST.Control.toggleButton.js":7}],13:[function(require,module,exports){
 'use strict';
 var {speed} = require('./ST.Layer.WMS.Speed.js')
+var {excessYear} = require('./ST.Layer.WMS.ExcessYear.js')
 var {congestion} = require('./ST.Layer.Heat.Congestion.js')
 var {incident} = require('./ST.Control.Layers.Incident.js')
 var {pois} = require('./ST.Control.Layers.Pois.js')
@@ -13990,6 +14032,9 @@ var _Map = L.Map.extend({
         speedEnabled: true,
         speedVisible: false,
         //     speedIcon: 'dashboard',
+        excessEnabled: true,
+        excessVisible: false,
+        //     excessIcon: 'dashboard',
         incidentsEnabled: true,
         incidentsVisible: false,
         //     incidentsIcon: 'exclamation-triangle',
@@ -14006,10 +14051,10 @@ var _Map = L.Map.extend({
     },
 
     setView: function (center, zoom, options) {
-        console.log(this.options);
         L.Map.prototype.setView.call(this, center, zoom, options);
         this._initCongestion(this.options);
         this._initSpeed(this.options);
+        this._initExcessYear(this.options);
         this._initIncidents(this.options);
         this._initPois(this.options);
         return this;
@@ -14034,6 +14079,17 @@ var _Map = L.Map.extend({
             speedOptions.icon = options.speedIcon;
         this._speed = speed(speedOptions).addTo(this);
         this.on('dragend zoomend', L.bind(this._speed.update, this._speed));
+    },
+
+    _initExcessYear: function (options) {
+        if (!options.excessEnabled)
+            return;
+        var excessOptions = this._baseOptions(options);
+        excessOptions.visible = options.excessVisible;
+        if ('excessIcon' in options)
+            excessOptions.icon = options.excessIcon;
+        this._excess = excessYear(excessOptions).addTo(this);
+        this.on('dragend zoomend', L.bind(this._excess.update, this._excess));
     },
 
     _initIncidents: function (options) {
@@ -14084,13 +14140,14 @@ module.exports = {
     },
 };
 
-},{"./ST.Control.Layers.Incident.js":3,"./ST.Control.Layers.Pois.js":4,"./ST.Layer.Heat.Congestion.js":8,"./ST.Layer.WMS.Speed.js":10}],13:[function(require,module,exports){
+},{"./ST.Control.Layers.Incident.js":3,"./ST.Control.Layers.Pois.js":4,"./ST.Layer.Heat.Congestion.js":8,"./ST.Layer.WMS.ExcessYear.js":10,"./ST.Layer.WMS.Speed.js":11}],14:[function(require,module,exports){
 'use strict';
 require('leaflet');
 var {Map, map} = require('./ST.Map.js');
 var {WMS, wms} = require('./ST.Layer.WMS.js');
 var {Heat, heat} = require('./ST.Layer.Heat.js');
 var {Speed, speed} = require('./ST.Layer.WMS.Speed.js');
+var {ExcessYear, excessYear} = require('./ST.Layer.WMS.ExcessYear.js')
 var {Legend, legend} = require('./ST.Control.Legend.js');
 var {Layers, layers} = require('./ST.Control.Layers.js');
 var {Pois, pois} = require('./ST.Control.Layers.Pois.js')
@@ -14115,19 +14172,21 @@ L.ST = {
         ToggleButton: ToggleButton,
     },
     Layer: {
-        heat: heat,
-        Heat: Heat,
+        excessYear: excessYear,
+        ExcessYear: ExcessYear,
         speed: speed,
         Speed: Speed,
-        // General
         congestion: congestion,
         Congestion: Congestion,
+        // General
+        heat: heat,
+        Heat: Heat,
         wms: wms,
         WMS: WMS,
     }
 };
 
-},{"./ST.Control.Layers.Incident.js":3,"./ST.Control.Layers.Pois.js":4,"./ST.Control.Layers.js":5,"./ST.Control.Legend.js":6,"./ST.Control.ToggleButton.js":7,"./ST.Layer.Heat.Congestion.js":8,"./ST.Layer.Heat.js":9,"./ST.Layer.WMS.Speed.js":10,"./ST.Layer.WMS.js":11,"./ST.Map.js":12,"leaflet":2}],14:[function(require,module,exports){
+},{"./ST.Control.Layers.Incident.js":3,"./ST.Control.Layers.Pois.js":4,"./ST.Control.Layers.js":5,"./ST.Control.Legend.js":6,"./ST.Control.ToggleButton.js":7,"./ST.Layer.Heat.Congestion.js":8,"./ST.Layer.Heat.js":9,"./ST.Layer.WMS.ExcessYear.js":10,"./ST.Layer.WMS.Speed.js":11,"./ST.Layer.WMS.js":12,"./ST.Map.js":13,"leaflet":2}],15:[function(require,module,exports){
 "use strict";!function(){function t(i){return this instanceof t?(this._canvas=i="string"==typeof i?document.getElementById(i):i,this._ctx=i.getContext("2d"),this._width=i.width,this._height=i.height,this._max=1,void this.clear()):new t(i)}t.prototype={defaultRadius:25,defaultGradient:{.4:"blue",.6:"cyan",.7:"lime",.8:"yellow",1:"red"},data:function(t,i){return this._data=t,this},max:function(t){return this._max=t,this},add:function(t){return this._data.push(t),this},clear:function(){return this._data=[],this},radius:function(t,i){i=i||15;var a=this._circle=document.createElement("canvas"),s=a.getContext("2d"),e=this._r=t+i;return a.width=a.height=2*e,s.shadowOffsetX=s.shadowOffsetY=200,s.shadowBlur=i,s.shadowColor="black",s.beginPath(),s.arc(e-200,e-200,t,0,2*Math.PI,!0),s.closePath(),s.fill(),this},gradient:function(t){var i=document.createElement("canvas"),a=i.getContext("2d"),s=a.createLinearGradient(0,0,0,256);i.width=1,i.height=256;for(var e in t)s.addColorStop(e,t[e]);return a.fillStyle=s,a.fillRect(0,0,1,256),this._grad=a.getImageData(0,0,1,256).data,this},draw:function(t){this._circle||this.radius(this.defaultRadius),this._grad||this.gradient(this.defaultGradient);var i=this._ctx;i.clearRect(0,0,this._width,this._height);for(var a,s=0,e=this._data.length;s<e;s++)a=this._data[s],i.globalAlpha=Math.max(a[2]/this._max,t||.05),i.drawImage(this._circle,a[0]-this._r,a[1]-this._r);var n=i.getImageData(0,0,this._width,this._height);return this._colorize(n.data,this._grad),i.putImageData(n,0,0),this},_colorize:function(t,i){for(var a,s=3,e=t.length;s<e;s+=4)a=4*t[s],a&&(t[s-3]=i[a],t[s-2]=i[a+1],t[s-1]=i[a+2])}},window.simpleheat=t}(),L.HeatLayer=(L.Layer?L.Layer:L.Class).extend({initialize:function(t){L.setOptions(this,t),console.log(this.options)},setLatLngs:function(t){return this._latlngs=t,this.redraw()},addLatLng:function(t){return this._latlngs.push(t),this.redraw()},setOptions:function(t){return L.setOptions(this,t),this._heat&&this._updateOptions(),this.redraw()},redraw:function(){return this._heat&&!this._frame&&this._map&&!this._map._animating&&(this._frame=L.Util.requestAnimFrame(this._redraw,this)),this},onAdd:function(t){this._map=t,this._canvas||this._initCanvas(),this.options.pane?this.getPane().appendChild(this._canvas):t._panes.overlayPane.appendChild(this._canvas),t.on("moveend zoomend",this._reset,this),t.options.zoomAnimation&&L.Browser.any3d&&t.on("zoomanim",this._animateZoom,this),this._reset()},onRemove:function(t){this.options.pane?this.getPane().removeChild(this._canvas):t.getPanes().overlayPane.removeChild(this._canvas),t.off("moveend",this._reset,this),t.options.zoomAnimation&&t.off("zoomanim",this._animateZoom,this)},addTo:function(t){return t.addLayer(this),this},_initCanvas:function(){var t=this._canvas=L.DomUtil.create("canvas","leaflet-heatmap-layer leaflet-layer"),i=L.DomUtil.testProp(["transformOrigin","WebkitTransformOrigin","msTransformOrigin"]);t.style[i]="50% 50%";var a=this._map.getSize();t.width=a.x,t.height=a.y;var s=this._map.options.zoomAnimation&&L.Browser.any3d;L.DomUtil.addClass(t,"leaflet-zoom-"+(s?"animated":"hide")),this._heat=simpleheat(t),this._canvas=t,this._updateOptions()},_updateOptions:function(){this._heat.radius(this.options.radius||this._heat.defaultRadius,this.options.blur),this.options.gradient&&this._heat.gradient(this.options.gradient),this.options.max&&this._heat.max(this.options.max),this.options.opacity,this._canvas.style.opacity=this.options.opacity},_reset:function(){if(this.options.radius_func){var t=this.options.radius_func(this._map.getZoom());this._heat.radius(t,t/2)}var i=this;this.options.url?this._latlngs=this._getData(function(t){i._latlngs=i.options.parseResponse(t),i._redraw()}):this.options.latlngs&&(this._latlngs=latlngs,i._redraw())},_redraw:function(){if(this._map){var t,i,a,s,e,n,o,h,r,l=[],_=this._heat._r,d=this._map.getSize(),c=new L.Bounds(L.point([-_,-_]),d.add([_,_])),u=void 0===this.options.max?1:this.options.max,m=void 0===this.options.maxZoom?this._map.getMaxZoom():this.options.maxZoom,p=1/Math.pow(2,Math.max(0,Math.min(m-this._map.getZoom(),12))),g=_/2,f=[],v=this._map._getMapPanePos(),w=v.x%g,y=v.y%g;for(t=0,i=this._latlngs.length;t<i;t++)if(a=this._map.latLngToContainerPoint(this._latlngs[t]),c.contains(a)){e=Math.floor((a.x-w)/g)+2,n=Math.floor((a.y-y)/g)+2;var x=void 0!==this._latlngs[t].alt?this._latlngs[t].alt:void 0!==this._latlngs[t][2]?+this._latlngs[t][2]:1;r=x*p,f[n]=f[n]||[],s=f[n][e],s?(s[0]=(s[0]*s[2]+a.x*r)/(s[2]+r),s[1]=(s[1]*s[2]+a.y*r)/(s[2]+r),s[2]+=r):f[n][e]=[a.x,a.y,r]}for(t=0,i=f.length;t<i;t++)if(f[t])for(o=0,h=f[t].length;o<h;o++)s=f[t][o],s&&l.push([Math.round(s[0]),Math.round(s[1]),Math.min(s[2],u)]);var M=this._map.containerPointToLayerPoint([0,0]);L.DomUtil.setPosition(this._canvas,M);var d=this._map.getSize();this._heat._width!==d.x&&(this._canvas.width=this._heat._width=d.x),this._heat._height!==d.y&&(this._canvas.height=this._heat._height=d.y),this._heat.data(l).draw(this.options.minOpacity),this._frame=null}},_getData:function(t){this._callData=this._getAjax,this.options.jsonpParam&&(this.options.url+="&"+this.options.jsonpParam+"=",this._callData=this._getJsonp),this._curReq=null;var i=this._map.getBounds(),a=i.getSouthWest(),s=i.getNorthEast(),e=L.Util.template(this.options.url,{minX:a.lng,minY:a.lat,maxX:s.lng,maxY:s.lat});this._curReq&&this._curReq.abort();var n=this;this._curReq=this._callData(e,function(i){n._curReq=null,t(i)})},_getAjax:function(url,cb){void 0===window.XMLHttpRequest&&(window.XMLHttpRequest=function(){try{return new ActiveXObject("Microsoft.XMLHTTP.6.0")}catch(t){try{return new ActiveXObject("Microsoft.XMLHTTP.3.0")}catch(t){throw new Error("XMLHttpRequest is not supported")}}});var request=new XMLHttpRequest;return request.open("GET",url),request.onreadystatechange=function(){var response={};if(4===request.readyState&&200===request.status){try{response=window.JSON?JSON.parse(request.responseText):eval("("+request.responseText+")")}catch(t){throw response={},new Error("Ajax response is not JSON")}cb(response)}},request.send(),request},_getJsonp:function(t,i){var a=document.getElementsByTagName("body")[0],s=L.DomUtil.create("script","leaflet-layerjson-jsonp",a);return L.LayerJSON.callJsonp=function(t){i(t),a.removeChild(s)},s.type="text/javascript",s.src=t+"L.LayerJSON.callJsonp",{abort:function(){s.parentNode.removeChild(s)}}},_animateZoom:function(t){var i=this._map.getZoomScale(t.zoom),a=this._map._getCenterOffset(t.center)._multiplyBy(-i).subtract(this._map._getMapPanePos());L.DomUtil.setTransform?L.DomUtil.setTransform(this._canvas,a,i):this._canvas.style[L.DomUtil.TRANSFORM]=L.DomUtil.getTranslateString(a)+" scale("+i+")"}}),L.heatLayer=function(t,i){return new L.HeatLayer(t,i)};
 
-},{}]},{},[13]);
+},{}]},{},[14]);

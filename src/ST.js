@@ -4,6 +4,7 @@ var {Map, map} = require('./ST.Map.js');
 var {WMS, wms} = require('./ST.Layer.WMS.js');
 var {Heat, heat} = require('./ST.Layer.Heat.js');
 var {Speed, speed} = require('./ST.Layer.WMS.Speed.js');
+var {ExcessYear, excessYear} = require('./ST.Layer.WMS.ExcessYear.js')
 var {Legend, legend} = require('./ST.Control.Legend.js');
 var {Layers, layers} = require('./ST.Control.Layers.js');
 var {Pois, pois} = require('./ST.Control.Layers.Pois.js')
@@ -28,13 +29,15 @@ L.ST = {
         ToggleButton: ToggleButton,
     },
     Layer: {
-        heat: heat,
-        Heat: Heat,
+        excessYear: excessYear,
+        ExcessYear: ExcessYear,
         speed: speed,
         Speed: Speed,
-        // General
         congestion: congestion,
         Congestion: Congestion,
+        // General
+        heat: heat,
+        Heat: Heat,
         wms: wms,
         WMS: WMS,
     }
