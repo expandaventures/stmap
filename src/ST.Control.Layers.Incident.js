@@ -114,25 +114,25 @@ var incident = Layers.extend({
     },
 
     _iconPath: function (category) {
-        var base = this.options.imgPath;
+        var base = 'http://s3.amazonaws.com/sintrafico/images/';
         switch(category) {
             case 'Accidente':
-            case 'Accidente Grave': return base + 'Choque.png';
-            case 'Obra': return base + 'Obra.png';
-            case 'Inundación': return base + 'Inundacion5.png';
+            case 'Accidente Grave': return base + 'iconos_accidente.png';
+            case 'Obra': return base + 'iconos_obras.png';
+            case 'Inundación': return base + 'iconos_inundacion.png';
             case 'Manifestación':
-            case 'Huelga/Plantón': return base + 'Manifestacion.png';
-            case 'Evento': return base + 'Evento.png';
-            case 'Incidentes': return base + 'Reporte.png';
-            case 'Peregrinación': return base + 'Peregrinacion.png';
-            case 'Vehículo Descompuesto': return base + 'VehiculoDescompuesto.png';
-            case 'Mercado': return base + 'Mercado.png';
-            case 'Cortes Intermitentes': return base + 'Reporte.png';
-            case 'Contraflujo': return base + 'Contraflujo.png';
-            case 'Abierto': return base + 'Abierto.png';
-            case 'Alerta': return base + 'Alerta.png';
-            case 'Movilización': return base + 'Movilizacion.png';
-            default: return base + 'Reporte.png';  // missing public transport
+            case 'Huelga/Plantón': return base + 'iconos_manifestacion.png';
+            case 'Evento': return base + 'iconos_evento.png';
+            case 'Incidentes': return base + 'iconos_reporte.png';
+            case 'Peregrinación': return base + 'iconos_peregrinacion.png';
+            case 'Vehículo Descompuesto': return base + 'iconos_vehiculo_descompuesto.png';
+            case 'Mercado': return base + 'iconos_mercado.png';
+            case 'Cortes Intermitentes': return base + 'iconos_reporte.png';
+            case 'Contraflujo': return base + 'iconos_contraflujo.png';
+            case 'Abierto': return base + 'iconos_abierto.png';
+            case 'Alerta': return base + 'iconos_alerta.png';
+            case 'Movilización': return base + 'iconos_movilizacion.png';
+            default: return base + 'iconos_reporte.png';  // missing public transport
         }
     },
 });
