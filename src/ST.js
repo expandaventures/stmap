@@ -1,5 +1,5 @@
 'use strict';
-require('leaflet');
+//require('leaflet');
 var {Map, map} = require('./ST.Map.js');
 var {WMS, wms} = require('./ST.Layer.WMS.js');
 var {Heat, heat} = require('./ST.Layer.Heat.js');
