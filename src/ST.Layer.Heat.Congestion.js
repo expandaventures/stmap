@@ -24,6 +24,8 @@ var congestion = Heat.extend({
     },
 
     initialize: function (options) {
+        if (options == undefined)
+            options = {};
         options.url = 'http://tile.sintrafico.com/rawlayers/heatmap.json?' +
                            'bbox={minX},{minY},{maxX},{maxY}&apiKey=' + options.apiKey;
         if (options.icon == undefined)

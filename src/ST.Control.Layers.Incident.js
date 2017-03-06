@@ -6,7 +6,7 @@ var incident = Layers.extend({
     options: {
         apiKey: '',
         callback: null,
-        imgPath: 'node_modules/stmap/img/icons/',
+        imgPath: 'http://s3.amazonaws.com/sintrafico/images/',
         initialVisibility: true,
         tableDiv: null,
         // ST.Control.Layers defaults:
@@ -19,7 +19,7 @@ var incident = Layers.extend({
         if (options.icon == undefined)
             options.icon = 'exclamation-triangle';
         if (options.imgPath == undefined)
-            options.imgPath = 'node_modules/stmap/img/icons/';
+            options.imgPath = 'http://s3.amazonaws.com/sintrafico/images/';
         L.setOptions(this, options);
         Layers.prototype.initialize.call(this, null, null, options);
     },
@@ -68,6 +68,7 @@ var incident = Layers.extend({
 
     _receiveIncidents: function (data) {
         var markers = {};
+        var that = this;
         // Process and organize data
         var tbody = document.createElement('tbody');
         data.items.map((report, index) => {
@@ -86,7 +87,7 @@ var incident = Layers.extend({
                 var row = document.createElement('tr');
                 row.classList.add(this.city(report.lat, report.lng));
                 row.onclick = function() {
-                    this._map.setView(new L.latLng(report.lat, report.lng));
+                    that._map.setView(new L.latLng(report.lat, report.lng));
                     marker.openPopup();
                 };
                 row.appendChild(cell);
@@ -109,12 +110,12 @@ var incident = Layers.extend({
             reportDiv.innerHTML = '';  // remove loader
             reportDiv.appendChild(table);
         }
-        if (this.callback)
-            this.callback(data.items);
+        if (this.options.callback)
+            this.options.callback(data.items);
     },
 
     _iconPath: function (category) {
-        var base = 'http://s3.amazonaws.com/sintrafico/images/';
+        var base = this.options.imgPath;
         switch(category) {
             case 'Accidente':
             case 'Accidente Grave': return base + 'iconos_accidente.png';
