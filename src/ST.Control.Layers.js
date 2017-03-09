@@ -24,6 +24,26 @@ var layers = L.Control.Layers.extend({
                                             '</center>';
         return container;
     },
+
+    showAll: function () {
+        var inputs = this._form.getElementsByTagName('input');
+        var input, layer;
+        for (var i = inputs.length - 1; i >= 0; i--) {
+			input = inputs[i];
+			layer = this._getLayer(input.layerId).layer;
+            this._map.addLayer(layer);
+		}
+    },
+
+    hideAll: function () {
+        var inputs = this._form.getElementsByTagName('input');
+        var input, layer;
+        for (var i = inputs.length - 1; i >= 0; i--) {
+			input = inputs[i];
+			layer = this._getLayer(input.layerId).layer;
+            this._map.removeLayer(layer);
+		}
+    },
 });
 
 module.exports = {
