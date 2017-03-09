@@ -44,6 +44,40 @@ var layers = L.Control.Layers.extend({
             this._map.removeLayer(layer);
 		}
     },
+
+	_update: function () {
+        L.Control.Layers.prototype._update.call(this);
+        this._addItem({layer: L.layerGroup(), name: 'Todos', overlay: true, default: false});
+    },
+
+	_addItem: function (obj) {
+	    if (obj.default)
+            return L.Control.Layers.prototype._addItem.call(this, obj);
+
+        var label = document.createElement('label');
+        var input = document.createElement('input');
+        input.type = 'checkbox';
+        input.className = 'leaflet-control-layers-selector';
+        input.checked = false;
+        input.layerId = L.Util.stamp(obj.layer);
+
+//		DomEvent.on(input, 'click', this._onInputClick, this);
+
+		var name = document.createElement('span');
+		name.innerHTML = ' ' + obj.name;
+
+		var holder = document.createElement('div');
+
+		label.appendChild(holder);
+		holder.appendChild(input);
+		holder.appendChild(name);
+
+		var container = this._overlaysList;
+		container.insertBefore(label, container.firstChild);
+	    console.log(obj);
+		console.log(container.children.length);
+        return label;
+	},
 });
 
 module.exports = {

@@ -55,7 +55,7 @@ var _Map = L.Map.extend({
             this._initSpeed(this.options);
             this._initService(this.options);
             this._initExcessYear(this.options);
-            this._initIncidents(this.options);
+//            this._initIncidents(this.options);
             this._initPois(this.options);
         }
         this._firstLoad = false;
