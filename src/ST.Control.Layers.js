@@ -9,8 +9,9 @@ var layers = L.Control.Layers.extend({
     },
 
     initialize: function (baseLayers, overlays, options) {
-        L.setOptions(this, options);
         L.Control.Layers.prototype.initialize.call(this, baseLayers, overlays, options);
+        L.setOptions(this, options);
+        this.visible = false;
     },
 
     onAdd: function (map) {
@@ -30,6 +31,8 @@ var layers = L.Control.Layers.extend({
         var input, layer;
         for (var i = inputs.length - 1; i >= 0; i--) {
 			input = inputs[i];
+			if (input.layerId == -1)
+			    continue
 			layer = this._getLayer(input.layerId).layer;
             this._map.addLayer(layer);
 		}
@@ -40,18 +43,28 @@ var layers = L.Control.Layers.extend({
         var input, layer;
         for (var i = inputs.length - 1; i >= 0; i--) {
 			input = inputs[i];
+			if (input.layerId == -1)
+			    continue
 			layer = this._getLayer(input.layerId).layer;
             this._map.removeLayer(layer);
 		}
     },
 
+	_allClick: function (ev) {
+	    ev.preventDefault();
+	    this.visible = !this.visible;
+	    this.allInput.checked = this.visible;
+	    console.log(this.allInput.checked);
+	    this.visible ? this.showAll() : this.hideAll();
+    },
+
 	_update: function () {
         L.Control.Layers.prototype._update.call(this);
-        this._addItem({layer: L.layerGroup(), name: 'Todos', overlay: true, default: false});
+        this._addItem({layer: null, name: 'Todos', overlay: true, fake: true});
     },
 
 	_addItem: function (obj) {
-	    if (obj.default)
+	    if (!obj.fake)
             return L.Control.Layers.prototype._addItem.call(this, obj);
 
         var label = document.createElement('label');
@@ -59,9 +72,10 @@ var layers = L.Control.Layers.extend({
         input.type = 'checkbox';
         input.className = 'leaflet-control-layers-selector';
         input.checked = false;
-        input.layerId = L.Util.stamp(obj.layer);
+        input.layerId = -1;
 
-//		DomEvent.on(input, 'click', this._onInputClick, this);
+		L.DomEvent.on(input, 'click', this._allClick, this);
+		this.allInput = input;
 
 		var name = document.createElement('span');
 		name.innerHTML = ' ' + obj.name;
@@ -74,9 +88,14 @@ var layers = L.Control.Layers.extend({
 
 		var container = this._overlaysList;
 		container.insertBefore(label, container.firstChild);
-	    console.log(obj);
-		console.log(container.children.length);
+
         return label;
+    },
+
+	_getLayer: function (layerId) {
+	    if (layerId > -1)
+            return L.Control.Layers.prototype._getLayer.call(this, layerId);
+        return {layer: {options: {}}};
 	},
 });
 
