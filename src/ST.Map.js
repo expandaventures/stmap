@@ -50,12 +50,12 @@ var _Map = L.Map.extend({
         L.Map.prototype.setView.call(this, center, zoom, options);
         if (this._firstLoad) {
             // order in which they are called determines order of buttons
-//            this._initMunicipalities(this.options);
-//            this._initCongestion(this.options);
-//            this._initSpeed(this.options);
-//            this._initService(this.options);
-//            this._initExcessYear(this.options);
-//            this._initIncidents(this.options);
+            this._initMunicipalities(this.options);
+            this._initCongestion(this.options);
+            this._initSpeed(this.options);
+            this._initService(this.options);
+            this._initExcessYear(this.options);
+            this._initIncidents(this.options);
             this._initPois(this.options);
         }
         this._firstLoad = false;

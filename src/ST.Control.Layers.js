@@ -54,7 +54,6 @@ var layers = L.Control.Layers.extend({
 	    ev.preventDefault();
 	    this.visible = !this.visible;
 	    this.allInput.checked = this.visible;
-	    console.log(this.allInput.checked);
 	    this.visible ? this.showAll() : this.hideAll();
     },
 
