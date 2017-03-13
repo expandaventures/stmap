@@ -6,6 +6,7 @@ var layers = L.Control.Layers.extend({
         position: 'topright',
         icon: 'podcast',
         color: '#5F7C8A',
+        allText: 'Todos',
     },
 
     initialize: function (baseLayers, overlays, options) {
@@ -66,7 +67,7 @@ var layers = L.Control.Layers.extend({
 
 	_update: function () {
         L.Control.Layers.prototype._update.call(this);
-        this._addItem({layer: null, name: 'Todos', overlay: true, fake: true});
+        this._addItem({layer: null, name: this.options.allText, overlay: true, fake: true});
     },
 
 	_addItem: function (obj) {

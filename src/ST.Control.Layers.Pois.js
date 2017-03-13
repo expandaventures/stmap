@@ -12,6 +12,7 @@ var pois = Layers.extend({
         //     position: 'topright',
         //     icon: 'podcast',
         //     color: '#5F7C8A',
+        //     allText: 'Todos',
     },
 
     initialize: function (options) {
