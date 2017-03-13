@@ -15,6 +15,7 @@ var service = WMS.extend({
         //     width: '300px',
         // ST.Control.ToggleButton
         icon: 'bar-chart',
+        title: 'Nivel de servicio',
         //     buttonPosition: 'topright',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
@@ -24,6 +25,8 @@ var service = WMS.extend({
         options.url = 'http://tile.sintrafico.com/wms/segment_service.png';
         if (options.icon == undefined)
             options.icon = 'bar-chart';
+        if (options.title == undefined)
+            options.title = 'Nivel de servicio';
         L.setOptions(this, options);
         WMS.prototype.initialize.call(this, options);
     },

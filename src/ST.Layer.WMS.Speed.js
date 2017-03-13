@@ -15,6 +15,7 @@ var speed = WMS.extend({
         //     width: '300px',
         // ST.Control.ToggleButton
         icon: 'dashboard',
+        title: 'Velocidad promedio',
         //     buttonPosition: 'topright',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
@@ -24,6 +25,8 @@ var speed = WMS.extend({
         options.url = 'http://tile.sintrafico.com/wms/segment_speed_hr_avg.png';
         if (options.icon == undefined)
             options.icon = 'dashboard';
+        if (options.title == undefined)
+            options.title = 'Velocidad promedio';
         L.setOptions(this, options);
         WMS.prototype.initialize.call(this, options);
     },

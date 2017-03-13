@@ -15,6 +15,7 @@ var excess = WMS.extend({
         //     width: '300px',
         // ST.Control.ToggleButton
         icon: 'bolt',
+        title: 'Excesos/Año',
         //     buttonPosition: 'topright',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
@@ -24,6 +25,8 @@ var excess = WMS.extend({
         options.url = 'http://tile.sintrafico.com/wms/segment_excesses.png';
         if (options.icon == undefined)
             options.icon = 'bolt';
+        if (options.title == undefined)
+            options.title = 'Excesos/Año';
         L.setOptions(this, options);
         WMS.prototype.initialize.call(this, options);
     },
