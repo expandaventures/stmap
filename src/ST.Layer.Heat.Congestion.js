@@ -18,6 +18,7 @@ var congestion = Heat.extend({
         //     width: '300px',
         // ST.Control.ToggleButton
         icon: 'thermometer-empty',
+        title: 'Congestion',
         //     buttonPosition: 'topright',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
@@ -30,6 +31,8 @@ var congestion = Heat.extend({
                            'bbox={minX},{minY},{maxX},{maxY}&apiKey=' + options.apiKey;
         if (options.icon == undefined)
             options.icon = 'thermometer-empty';
+        if (options.title == undefined)
+            options.title = 'Congestion';
         L.setOptions(this, options);
         L.ST.Layer.Heat.prototype.initialize.call(this, options);
     },

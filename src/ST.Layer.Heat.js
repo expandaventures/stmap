@@ -23,6 +23,7 @@ var layer = L.Layer.extend({
         //     icon: 'podcast',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
+        //     title: 'Toggle Layer',
     },
 
     initialize: function (options) {
@@ -78,14 +79,16 @@ var layer = L.Layer.extend({
             callbackTarget: this,
             initialValue: this.options.visible,
         };
+        if ('buttonPosition' in options)
+            newOptions.position = options.buttonPosition;
+        if (options.icon)
+            newOptions.icon = options.icon;
         if ('colorOn' in options)
             newOptions.colorOn = options.colorOn;
         if ('colorOff' in options)
             newOptions.colorOff = options.colorOff;
-        if (options.icon)
-            newOptions.icon = options.icon;
-        if ('buttonPosition' in options)
-            newOptions.position = options.buttonPosition;
+        if ('title' in options)
+            newOptions.title = options.title;
         return newOptions;
     },
 

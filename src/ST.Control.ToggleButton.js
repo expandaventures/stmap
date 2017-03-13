@@ -12,6 +12,7 @@ var button = L.Control.extend({
         icon: 'podcast',
         colorOn: '#337AB7',
         colorOff: '#5F7C8A',
+        title: 'Toggle Layer',
     },
 
     initialize: function (options) {
@@ -29,7 +30,8 @@ var button = L.Control.extend({
         container.style.width = '35px';
         container.style.height = '35px';
         container.style.color = this.options.initialValue ? this.options.colorOn : this.options.colorOff;
-        container.innerHTML = '<center><span style="margin-top:4px;" class="fa fa-2x fa-' +
+        container.innerHTML = '<center title="' + this.options.title + '">' +
+                              '<span style="margin-top:4px;" class="fa fa-2x fa-' +
                               this.options.icon + '"></span></center>';
         container.onclick = this._clicked;
         // Properties
