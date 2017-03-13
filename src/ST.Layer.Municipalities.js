@@ -10,6 +10,7 @@ var municipalities = L.Layer.extend({
         // ST.Control.ToggleButton
         buttonPosition: 'topright',
         icon: 'map',
+        title: 'Municipios',
         //     initialValue: true,
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
@@ -19,6 +20,8 @@ var municipalities = L.Layer.extend({
         L.setOptions(this, options);
         if (options.icon == undefined)
             options.icon = 'map';
+        if (options.title == undefined)
+            options.title = 'Municipios';
         this._visible = this.options.visible;
         var that = this;
         this._layer = L.geoJSON(test, {
@@ -104,6 +107,8 @@ var municipalities = L.Layer.extend({
             newOptions.icon = options.icon;
         if ('buttonPosition' in options)
             newOptions.position = options.buttonPosition;
+        if ('title' in options)
+            newOptions.title = options.title;
         return newOptions;
     },
 });
