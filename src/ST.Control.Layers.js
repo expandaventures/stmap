@@ -11,7 +11,6 @@ var layers = L.Control.Layers.extend({
     initialize: function (baseLayers, overlays, options) {
         L.Control.Layers.prototype.initialize.call(this, baseLayers, overlays, options);
         L.setOptions(this, options);
-        this.visible = false;
     },
 
     onAdd: function (map) {
@@ -52,8 +51,8 @@ var layers = L.Control.Layers.extend({
 
 	_allClick: function (ev) {
 	    ev.stopPropagation();
-	    this.visible = !this.visible;
-	    this.visible ? this.showAll() : this.hideAll();
+	    var show = ev.target.checked;
+	    show ? this.showAll() : this.hideAll();
 	    var that = this;
 	    // stopPropagation() causes the check to never change state
 	    // If the state is changed manually, it wil be reverted by the browser after the function
@@ -61,7 +60,7 @@ var layers = L.Control.Layers.extend({
 	    // reverted the state and the check will change normally.
 	    // http://stackoverflow.com/a/22016879/1332561
 	    setTimeout(function () {
-	        that.allInput.checked = that.visible;
+	        that.allInput.checked = show;
         }, 1);
     },
 
@@ -103,6 +102,46 @@ var layers = L.Control.Layers.extend({
 	    if (layerId > -1)
             return L.Control.Layers.prototype._getLayer.call(this, layerId);
         return {layer: {options: {}}};
+	},
+
+	_onInputClick: function () {
+	    // Same behavior, only override to skip 'all' input and remove check when removing others
+		var inputs = this._form.getElementsByTagName('input'),
+		    input, layer, hasLayer;
+		var addedLayers = [],
+		    removedLayers = [];
+
+		this._handlingClick = true;
+
+		for (var i = inputs.length - 1; i >= 0; i--) {
+			input = inputs[i];
+			if (input.layerId == -1)
+			    continue
+			layer = this._getLayer(input.layerId).layer;
+			hasLayer = this._map.hasLayer(layer);
+
+			if (input.checked && !hasLayer) {
+				addedLayers.push(layer);
+
+			} else if (!input.checked && hasLayer) {
+				removedLayers.push(layer);
+			}
+		}
+
+		for (i = 0; i < removedLayers.length; i++) {
+			this._map.removeLayer(removedLayers[i]);
+		}
+		for (i = 0; i < addedLayers.length; i++) {
+			this._map.addLayer(addedLayers[i]);
+		}
+
+		if (removedLayers.length > 0) {
+		    this.allInput.checked = false;
+		}
+
+		this._handlingClick = false;
+
+		this._refocusOnMap();
 	},
 });
 
