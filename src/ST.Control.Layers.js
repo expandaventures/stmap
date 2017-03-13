@@ -51,10 +51,18 @@ var layers = L.Control.Layers.extend({
     },
 
 	_allClick: function (ev) {
-	    ev.preventDefault();
+	    ev.stopPropagation();
 	    this.visible = !this.visible;
-	    this.allInput.checked = this.visible;
 	    this.visible ? this.showAll() : this.hideAll();
+	    var that = this;
+	    // stopPropagation() causes the check to never change state
+	    // If the state is changed manually, it wil be reverted by the browser after the function
+	    // finishes execution. By setting a timeout, we execute the code after the browser has
+	    // reverted the state and the check will change normally.
+	    // http://stackoverflow.com/a/22016879/1332561
+	    setTimeout(function () {
+	        that.allInput.checked = that.visible;
+        }, 1);
     },
 
 	_update: function () {
