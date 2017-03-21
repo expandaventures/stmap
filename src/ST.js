@@ -4,6 +4,7 @@ var {Map, map} = require('./ST.Map.js');
 var {WMS, wms} = require('./ST.Layer.WMS.js');
 var {Heat, heat} = require('./ST.Layer.Heat.js');
 var {Speed, speed} = require('./ST.Layer.WMS.Speed.js');
+var {SpeedLive, speedLive} = require('./ST.Layer.WMS.SpeedLive.js');
 var {Service, service} = require('./ST.Layer.WMS.Service.js');
 var {Municipalities, municipalities} = require('./ST.Layer.Municipalities.js')
 var {ExcessYear, excessYear} = require('./ST.Layer.WMS.ExcessYear.js')
@@ -35,6 +36,8 @@ L.ST = {
         ExcessYear: ExcessYear,
         speed: speed,
         Speed: Speed,
+        speedLive: speed,
+        SpeedLive: Speed,
         service: service,
         Service: Service,
         municipalities: municipalities,
