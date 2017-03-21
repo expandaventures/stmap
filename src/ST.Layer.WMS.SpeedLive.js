@@ -17,7 +17,7 @@ var speed = WMS.extend({
         //     width: '300px',
         // ST.Control.ToggleButton
         icon: 'dashboard',
-        title: 'Velocidad promedio',
+        title: 'Velocidad en vivo',
         //     buttonPosition: 'topright',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',

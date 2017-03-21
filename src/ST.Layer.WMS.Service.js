@@ -15,7 +15,7 @@ var service = WMS.extend({
         //     width: '300px',
         // ST.Control.ToggleButton
         icon: 'bar-chart',
-        title: 'Nivel de servicio',
+        title: 'Servicio histórico',
         //     buttonPosition: 'topright',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
