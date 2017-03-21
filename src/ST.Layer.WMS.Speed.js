@@ -22,7 +22,7 @@ var speed = WMS.extend({
     },
 
     initialize: function (options) {
-        options.url = 'http://tile.sintrafico.com/wms/segment_speed_hr_avg.png';
+        options.url = 'http://tile.sintrafico.com/wms/speed_avg.png';
         if (options.icon == undefined)
             options.icon = 'dashboard';
         if (options.title == undefined)
