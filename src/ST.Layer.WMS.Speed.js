@@ -6,9 +6,11 @@ var speed = WMS.extend({
     options: {
         // ST.Layer.WMS
         visible: true,
+        url: 'http://tile.sintrafico.com/wms/speed_avg.png',
+        urlZoomedOut: 'http://tile.sintrafico.com/wms/speed_avg_main.png',
+        //     zoomThreshold: 15,
         //     callback: null,
         //     callbackTarget: null,
-        //     url: [set on initialize because it uses apiKey],
         // ST.Control.Legend
         imgSrc: 'LeyendaVelocidad.png',
         //     legendPosition: 'bottomright',
@@ -23,6 +25,7 @@ var speed = WMS.extend({
 
     initialize: function (options) {
         options.url = 'http://tile.sintrafico.com/wms/speed_avg.png';
+        options.urlZoomedOut = 'http://tile.sintrafico.com/wms/speed_avg_main.png';
         if (options.icon == undefined)
             options.icon = 'dashboard';
         if (options.title == undefined)

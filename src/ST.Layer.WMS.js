@@ -7,6 +7,8 @@ var layer = L.Layer.extend({
     options: {
         // this
         url: null,
+        urlZoomedOut: null,
+        zoomThreshold: 15,
         apiKey: '',
         visible: true,
         callback: null,
@@ -26,8 +28,6 @@ var layer = L.Layer.extend({
     initialize: function (options) {
         L.setOptions(this, options);
         this._layer = null;
-        this._url = this.options.url;
-        this._key = this.options.apiKey;
         this._visible = this.options.visible;
         this._legend = legend({imgSrc: this.options.imgSrc, position: this.options.legendPosition});
         this._button = toggleButton(this._buttonOptions(options));
@@ -64,10 +64,11 @@ var layer = L.Layer.extend({
             map.removeLayer(this._layer);
         var c = map.getContainer();
         var b = map.getBounds();
-        var imageUrl = this._url + '?key=' + this._key +
-                                   '&bbox=' + b.toBBoxString() +
-                                   '&height=' + c.offsetHeight +
-                                   '&width=' + c.offsetWidth;
+        var url = (map.getZoom() >= this.options.zoomThreshold ? this.options.url : this.options.urlZoomedOut);
+        var imageUrl = url + '?key=' + this.options.apiKey +
+                             '&bbox=' + b.toBBoxString() +
+                             '&height=' + c.offsetHeight +
+                             '&width=' + c.offsetWidth;
         this._layer = L.imageOverlay(imageUrl, map.getBounds());
         if (this._visible)
             this._layer.addTo(map);
