@@ -22,7 +22,7 @@ var service = WMS.extend({
     },
 
     initialize: function (options) {
-        options.url = 'http://tile.sintrafico.com/wms/segment_service.png';
+        options.url = 'http://tile.sintrafico.com/wms/service.png';
         if (options.icon == undefined)
             options.icon = 'bar-chart';
         if (options.title == undefined)

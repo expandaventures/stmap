@@ -22,7 +22,7 @@ var excess = WMS.extend({
     },
 
     initialize: function (options) {
-        options.url = 'http://tile.sintrafico.com/wms/segment_excesses.png';
+        options.url = 'http://tile.sintrafico.com/wms/speeding_year.png';
         if (options.icon == undefined)
             options.icon = 'bolt';
         if (options.title == undefined)
