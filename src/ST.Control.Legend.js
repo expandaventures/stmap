@@ -1,6 +1,12 @@
 'use strict';
 
-var l = L.Control.extend({
+
+L.control.legend = function (options) {
+    return new L.Control.Legend(options);
+}
+
+
+L.Control.Legend = L.Control.extend({
 
     options: {
         imgSrc: null,
@@ -28,8 +34,6 @@ var l = L.Control.extend({
 });
 
 module.exports = {
-    Legend: l,
-    legend: function (options) {
-        return new l(options);
-    },
+    Legend: L.Control.Legend,
+    legend: L.control.legend,
 };

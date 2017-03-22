@@ -1,6 +1,12 @@
 'use strict';
 
-var button = L.Control.extend({
+
+L.control.toggleButton = function (options) {
+    return new L.Control.ToggleButton(options);
+}
+
+
+L.Control.ToggleButton = L.Control.extend({
 
     // callback keeps this object's 'this' scope.
     // Therefore we must receive an object with the desired scope: 'callbackTarget'
@@ -56,8 +62,6 @@ var button = L.Control.extend({
 });
 
 module.exports = {
-    ToggleButton: button,
-    toggleButton: function (options) {
-        return new button(options);
-    },
+    ToggleButton: L.Control.ToggleButton,
+    toggleButton: L.control.toggleButton,
 };
