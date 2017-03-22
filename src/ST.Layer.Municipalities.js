@@ -1,10 +1,10 @@
 'use strict';
 var {toggleButton} = require('./ST.Control.ToggleButton.js')
-var municipalities = require('json-loader!./geo_mx_mun.json')
+var municipalities = require('./geo_mx_mun.json')
 
 
 L.stMunicipalities = function (options) {
-    return new L.Layer.STMunicipalities(options);
+    return new L.STMunicipalities(options);
 }
 
 
