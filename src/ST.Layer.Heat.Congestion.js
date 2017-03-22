@@ -4,8 +4,8 @@ var {Heat} = require('./ST.Layer.Heat.js')
 var congestion = Heat.extend({
 
     options: {
-        apiKey: '',
         // ST.Layer.Heat
+        //     apiKey: '',
         visible: true,
         //     callback: null,
         //     callbackTarget: null,
@@ -28,7 +28,7 @@ var congestion = Heat.extend({
         if (options == undefined)
             options = {};
         options.url = 'http://tile.sintrafico.com/rawlayers/heatmap.json?' +
-                           'bbox={minX},{minY},{maxX},{maxY}&apiKey=' + options.apiKey;
+                           'bbox={minX},{minY},{maxX},{maxY}';
         if (options.icon == undefined)
             options.icon = 'thermometer-empty';
         if (options.title == undefined)

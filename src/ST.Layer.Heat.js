@@ -7,6 +7,7 @@ var layer = L.Layer.extend({
 
     options: {
         // this
+        apiKey: '',
         visible: true,
         callback: null,
         callbackTarget: null,
@@ -28,9 +29,10 @@ var layer = L.Layer.extend({
 
     initialize: function (options) {
         L.setOptions(this, options);
+        var keyParam = options.url.includes('?') ? '&apiKey=' + options.apiKey :'?apiKey=' + options.apiKey;
         this._visible = this.options.visible;
         this._layer = L.heatLayer({
-            url: this.options.url,
+            url: this.options.url + keyParam,
             opacity: this.options.opacity,
             parseResponse: this._parseResponse,
             radius_func: this._radius,
