@@ -80,7 +80,6 @@ var _Map = L.Map.extend({
         if ('speedIcon' in options)
             speedOptions.icon = options.speedIcon;
         this._speed = speed(speedOptions).addTo(this);
-        this.on('dragend zoomend', L.bind(this._speed.update, this._speed));
     },
 
     _initService: function (options) {
@@ -91,7 +90,6 @@ var _Map = L.Map.extend({
         if ('serviceIcon' in options)
             serviceOptions.icon = options.serviceIcon;
         this._service = service(serviceOptions).addTo(this);
-        this.on('dragend zoomend', L.bind(this._service.update, this._service));
     },
 
     _initExcessYear: function (options) {
@@ -102,7 +100,6 @@ var _Map = L.Map.extend({
         if ('excessIcon' in options)
             excessOptions.icon = options.excessIcon;
         this._excess = excessYear(excessOptions).addTo(this);
-        this.on('dragend zoomend', L.bind(this._excess.update, this._excess));
     },
 
     _initIncidents: function (options) {
@@ -127,7 +124,6 @@ var _Map = L.Map.extend({
         if ('poisIcon' in options)
             poisOptions.icon = options.poisIcon;
         this._pois = pois(poisOptions).addTo(this);
-        this.on('dragend zoomend', L.bind(this._pois.update, this._pois));
     },
 
     _initMunicipalities: function (options) {

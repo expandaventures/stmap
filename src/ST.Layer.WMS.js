@@ -39,11 +39,13 @@ var layer = L.Layer.extend({
         if (this._visible)
             this._show(map);
         this._button.addTo(map);
+        map.on('dragend zoomend', L.bind(this.update, this));
     },
 
     onRemove: function (map) {
         this._hide(map);
         map.removeControl(this._button);
+        map.off('dragend zoomend', L.bind(this.update, this));
     },
 
     update: function () {
