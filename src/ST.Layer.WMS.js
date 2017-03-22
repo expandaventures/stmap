@@ -1,6 +1,6 @@
 'use strict';
 var {legend} = require('./ST.Control.Legend.js')
-var {toggleButton} = require('./ST.Control.toggleButton.js')
+var {toggleButton} = require('./ST.Control.ToggleButton.js')
 
 
 L.stWMS = function (options) {

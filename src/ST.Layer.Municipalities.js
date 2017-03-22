@@ -1,5 +1,5 @@
 'use strict';
-var {toggleButton} = require('./ST.Control.toggleButton.js')
+var {toggleButton} = require('./ST.Control.ToggleButton.js')
 var test = require('./geo_mx_mun.json')
 
 
