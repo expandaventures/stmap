@@ -64,7 +64,9 @@ var layer = L.Layer.extend({
             map.removeLayer(this._layer);
         var c = map.getContainer();
         var b = map.getBounds();
-        var url = (map.getZoom() >= this.options.zoomThreshold ? this.options.url : this.options.urlZoomedOut);
+        var url = (this.options.urlZoomedOut && this.options.zoomThreshold >= map.getZoom()) ?
+                   this.options.urlZoomedOut :
+                   this.options.url;
         var imageUrl = url + '?key=' + this.options.apiKey +
                              '&bbox=' + b.toBBoxString() +
                              '&height=' + c.offsetHeight +
