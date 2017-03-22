@@ -1,6 +1,6 @@
 'use strict';
 var {toggleButton} = require('./ST.Control.ToggleButton.js')
-var test = require('./geo_mx_mun.json')
+var municipalities = require('json-loader!./geo_mx_mun.json')
 
 
 L.stMunicipalities = function (options) {
@@ -30,7 +30,7 @@ L.STMunicipalities = L.Layer.extend({
             options.title = 'Municipios';
         this._visible = this.options.visible;
         var that = this;
-        this._layer = L.geoJSON(test, {
+        this._layer = L.geoJSON(municipalities, {
             style: this._style,
             onEachFeature: function (feature, layer) {
                 layer.on({
