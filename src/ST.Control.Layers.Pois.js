@@ -2,7 +2,13 @@
 require('leaflet.markercluster');
 var {Layers} = require('./ST.Control.Layers.js');
 
-var pois = Layers.extend({
+
+L.control.layers.stPois = function(options) {
+    return new L.Control.Layers.STPois(options);
+}
+
+
+L.Control.Layers.STPois = Layers.extend({
 
     options: {
         apiKey: '',
@@ -28,7 +34,12 @@ var pois = Layers.extend({
         var container = Layers.prototype.onAdd.call(this, map);
         this._clusters = {};
         this._getPois(map);  // call after this._map has been set
+        map.on('dragend zoomend', L.bind(this.update, this));
         return container;
+    },
+
+    onRemove: function (map) {
+        map.off('dragend zoomend', L.bind(this.update, this));
     },
 
     update: function () {
@@ -118,10 +129,3 @@ var pois = Layers.extend({
         }
     },
 });
-
-module.exports = {
-    Pois: pois,
-    pois: function(options) {
-        return new pois(options);
-    },
-};

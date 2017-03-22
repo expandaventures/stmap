@@ -1,6 +1,12 @@
 'use strict';
 
-var layers = L.Control.Layers.extend({
+
+L.control.layers.st = function(options) {
+    return new L.Control.Layers.ST(options);
+}
+
+
+L.Control.Layers.ST = L.Control.Layers.extend({
 
     options: {
         position: 'topright',
@@ -147,8 +153,6 @@ var layers = L.Control.Layers.extend({
 });
 
 module.exports = {
-    Layers: layers,
-    layers: function(baseLayers, overlays, options) {
-        return new layers(baseLayers, overlays, options);
-    },
+    Layers: L.Control.Layers.ST,
+    layers: L.control.layers.st,
 };

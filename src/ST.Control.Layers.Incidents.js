@@ -1,7 +1,13 @@
 'use strict';
 var {Layers} = require('./ST.Control.Layers.js')
 
-var incident = Layers.extend({
+
+L.control.layers.stIncidents = function(options) {
+    return new L.Control.Layers.STIncidents(options);
+}
+
+
+L.Control.Layers.STIncidents = Layers.extend({
 
     options: {
         apiKey: '',
@@ -138,10 +144,3 @@ var incident = Layers.extend({
         }
     },
 });
-
-module.exports = {
-    Incident: incident,
-    incident: function(options) {
-        return new incident(options);
-    },
-};

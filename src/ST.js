@@ -7,7 +7,7 @@ require('./ST.Layer.Municipalities.js')
 // ST Controls
 require('./ST.Control.Layers.js');
 require('./ST.Control.Layers.Pois.js')
-require('./ST.Control.Layers.Incident.js')
+require('./ST.Control.Layers.Incidents.js')
 // General Controls
 require('./ST.Control.Legend.js');
 require('./ST.Control.ToggleButton.js');
