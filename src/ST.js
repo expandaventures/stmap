@@ -3,6 +3,7 @@
 var {Map, map} = require('./ST.Map.js');
 var {WMS, wms} = require('./ST.Layer.WMS.js');
 var {Heat, heat} = require('./ST.Layer.Heat.js');
+var {layer} = require('./ST.Layer.js');
 var {Speed, speed} = require('./ST.Layer.WMS.Speed.js');
 var {SpeedLive, speedLive} = require('./ST.Layer.WMS.SpeedLive.js');
 var {Service, service} = require('./ST.Layer.WMS.Service.js');
@@ -32,6 +33,7 @@ L.ST = {
         ToggleButton: ToggleButton,
     },
     Layer: {
+        layer: layer,
         excessYear: excessYear,
         ExcessYear: ExcessYear,
         speed: speed,
