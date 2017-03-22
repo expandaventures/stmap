@@ -19,6 +19,7 @@ var layer = L.Layer.extend({
         //     width: '300px',
         // ST.Control.ToggleButton
         buttonPosition: 'topright',
+        //     initialValue: true,
         //     icon: 'podcast',
         //     colorOn: '#337AB7',
         //     colorOff: '#5F7C8A',
