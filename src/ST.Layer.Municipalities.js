@@ -2,7 +2,13 @@
 var {toggleButton} = require('./ST.Control.toggleButton.js')
 var test = require('./geo_mx_mun.json')
 
-var municipalities = L.Layer.extend({
+
+L.stMunicipalities = function (options) {
+    return new L.Layer.STMunicipalities(options);
+}
+
+
+L.STMunicipalities = L.Layer.extend({
 
     options: {
         // this
@@ -112,10 +118,3 @@ var municipalities = L.Layer.extend({
         return newOptions;
     },
 });
-
-module.exports = {
-    Municipalities: municipalities,
-    municipalities: function(options) {
-        return new municipalities(options);
-    },
-};

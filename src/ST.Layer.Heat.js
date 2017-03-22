@@ -3,7 +3,13 @@ require('./lib/leaflet-heat.js')
 var {legend} = require('./ST.Control.Legend.js')
 var {toggleButton} = require('./ST.Control.toggleButton.js')
 
-var layer = L.Layer.extend({
+
+L.stHeat = function (options) {
+    return new L.STHeat(options);
+}
+
+
+L.STHeat = L.Layer.extend({
 
     options: {
         // this
@@ -111,8 +117,6 @@ var layer = L.Layer.extend({
 });
 
 module.exports = {
-    Heat: layer,
-    heat: function (options) {
-        return new layer(options);
-    },
+    Heat: L.STHeat,
+    heat: L.stHeat,
 };

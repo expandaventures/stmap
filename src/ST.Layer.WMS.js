@@ -2,7 +2,13 @@
 var {legend} = require('./ST.Control.Legend.js')
 var {toggleButton} = require('./ST.Control.toggleButton.js')
 
-var layer = L.Layer.extend({
+
+L.stWMS = function (options) {
+    return new L.STWMS(options);
+}
+
+
+L.STWMS = L.Layer.extend({
 
     options: {
         // this
@@ -112,8 +118,6 @@ var layer = L.Layer.extend({
 });
 
 module.exports = {
-    WMS: layer,
-    wms: function(options) {
-        return new layer(options);
-    },
+    WMS: L.STWMS,
+    wms: L.stWMS,
 };
