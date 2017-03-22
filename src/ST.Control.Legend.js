@@ -17,17 +17,14 @@ var l = L.Control.extend({
             var container = L.DomUtil.create('div', 'logo-container');
             container.style.width = this.options.width;
             container.innerHTML = '<div class="row">'
-                                +   '<div class="col-md-12">'
-                                +     '<img class="logo" src="' + this.options.imgSrc + '">'
-                                +   '</div>'
+                                +     '<div class="col-md-12">'
+                                +         '<img class="logo" src="' + this.options.imgSrc + '">'
+                                +     '</div>'
                                 + '</div>';
             return container;
         }
         return L.DomUtil.create('div', 'logo-container');
     },
-
-    onRemove: function (map) {
-    }
 });
 
 module.exports = {
