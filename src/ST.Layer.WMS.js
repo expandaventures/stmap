@@ -68,10 +68,10 @@ var layer = L.Layer.extend({
         var url = (this.options.urlZoomedOut && this.options.zoomThreshold >= map.getZoom()) ?
                    this.options.urlZoomedOut :
                    this.options.url;
-        var imageUrl = url + '?key=' + this.options.apiKey +
-                             '&bbox=' + b.toBBoxString() +
+        var imageUrl = url + '?bbox=' + b.toBBoxString() +
                              '&height=' + c.offsetHeight +
-                             '&width=' + c.offsetWidth;
+                             '&width=' + c.offsetWidth +
+                             '&key=' + this.options.apiKey;
         this._layer = L.imageOverlay(imageUrl, map.getBounds());
         if (this._visible)
             this._layer.addTo(map);
