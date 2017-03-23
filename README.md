@@ -9,6 +9,11 @@ Uses [FontAwesome](http://fontawesome.io/) icons.
 ``` 
 
 ## Layers
+
+### L.stLayer(options)
+   Function that returns either [L.STHeat](#heat) or 
+   [L.STWMS](#wms) based on the URL provided in options. 
+
 ### Heat
 L.STHeat | L.stHeat
 
@@ -50,7 +55,7 @@ Options:
 * **buttonPosition**: default: `'topright'`
 * All [ToggleButton](#togglebutton) options except position
 
-### STMunicipalities
+### Municipalities
 L.STMunicipalities | L.stMunicipalities
 
 Show polygons of Mexico's municipalities
@@ -63,57 +68,7 @@ Options:
 * **title**: default: `'Municipios'`
 * All other [ToggleButton](#togglebutton) options
 
-### L.stLayer
-   Function that returns either `L.STWMS` or [L.STHeat](#heat) 
-   based on the URL provided in options. 
-
 ## Controls
-### Legend
-L.Control.Legend | L.control.legend
-
-Container with an image specified by source.
-
-Options:
-* **imgSc**: the path to the image that will be used
-* **position**: Leaflet position string. Default: `bottomright`
-* **width**: container width. Default: `300px`
-
-### ToggleButton
-L.Control.ToggleButton | L.control.toggleButton
-
-Button that changes color when clicked. Saves state to
-know if it is on or off and, if provided, calls the
-callback every time it is clicked.
-
-Options:
-* **callback**: `function(object callbackTarget, bool visible)` to call on click
-* **callbackTarget**: will be passed to callback as first
-    argument.
-* **position**: Leaflet position string. Default: `topright`
-* **initialValue**: boolean, default: `true`
-* **icon**: string indicating which [FontAwesome](http://fontawesome.io/)
-    icon to use. Default: `podcast`
-* **colorOn**: string representing hex color. Default: `#337AB7`
-* **colorOff**: string representing hex color. Default: `#5F7C8A`
-* **title**: string to show on hover. Default: `Toggle Layer`
-
-### Control.Layers.ST
-L.Control.Layers.ST | L.control.layers.st
-
-Like L.Control.Layers, but it adds a checkbox at the top
-which turns all layers on/off. 
-
-Options:
-* **position**: Leaflet position string. Default: `topright`
-* **icon**: string indicating which [FontAwesome](http://fontawesome.io/)
-    icon to use. Default: `podcast`
-* **color**: string representing hex color. Default: `#337AB7`
-* **allText**: string to show on checkbox. 
-    Default: `Todos`
-
-Methods:
-* `showAll()`: add all layers in the control to map
-* `hideAll()`: remove all layers in the control from map
 
 ### L.Control.Layers.STIncidents
 L.Control.Layers.STIncidents | L.control.layers.stIncidents
@@ -148,3 +103,50 @@ Options:
 * **initialVisibility**: if `true`, layers will be added
     to the map as soon as they are received.
 * All [Control.Layers.ST](#controllayersst) options
+
+### Control.Layers.ST
+L.Control.Layers.ST | L.control.layers.st
+
+Like L.Control.Layers, but it adds a checkbox at the top
+which turns all layers on/off. 
+
+Options:
+* **position**: Leaflet position string. Default: `topright`
+* **icon**: string indicating which [FontAwesome](http://fontawesome.io/)
+    icon to use. Default: `podcast`
+* **color**: string representing hex color. Default: `#337AB7`
+* **allText**: string to show on checkbox. 
+    Default: `Todos`
+
+Methods:
+* `showAll()`: add all layers in the control to map
+* `hideAll()`: remove all layers in the control from map
+
+### ToggleButton
+L.Control.ToggleButton | L.control.toggleButton
+
+Button that changes color when clicked. Saves state to
+know if it is on or off and, if provided, calls the
+callback every time it is clicked.
+
+Options:
+* **callback**: `function(object callbackTarget, bool visible)` to call on click
+* **callbackTarget**: will be passed to callback as first
+    argument.
+* **position**: Leaflet position string. Default: `topright`
+* **initialValue**: boolean, default: `true`
+* **icon**: string indicating which [FontAwesome](http://fontawesome.io/)
+    icon to use. Default: `podcast`
+* **colorOn**: string representing hex color. Default: `#337AB7`
+* **colorOff**: string representing hex color. Default: `#5F7C8A`
+* **title**: string to show on hover. Default: `Toggle Layer`
+
+### Legend
+L.Control.Legend | L.control.legend
+
+Container with an image specified by source.
+
+Options:
+* **imgSc**: the path to the image that will be used
+* **position**: Leaflet position string. Default: `bottomright`
+* **width**: container width. Default: `300px`
