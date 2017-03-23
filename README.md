@@ -67,7 +67,7 @@ Methods:
 ### L.Control.Layers.STIncidents
 L.Control.Layers.STIncidents | L.control.layers.stIncidents
 
-Child of [Control.Layers.ST](#control.layers.st). 
+Child of [Control.Layers.ST](#controllayersst). 
 Retrieves all active incidents from server and creates
 a layer for each category received.
 
@@ -81,7 +81,7 @@ Options:
 * tableDiv: if provided, a table will be created and
     placed in that div. When a row is clicked, the map
     will be centered to the incident's location
-* All [Control.Layers.ST](#control.layers.st) options
+* All [Control.Layers.ST](#controllayersst) options
 
 ### L.Control.Layers.STPois
 L.Control.Layers.STPois | L.control.layers.stPois
