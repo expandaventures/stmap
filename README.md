@@ -23,9 +23,9 @@ L.Control.Legend | L.control.legend
 Container with an image specified by source.
 
 Options:
-* imgSc: the path to the image that will be used
-* position: Leaflet position string. Default: `bottomright`
-* width: container width. Default: `300px`
+* **imgSc**: the path to the image that will be used
+* **position**: Leaflet position string. Default: `bottomright`
+* **width**: container width. Default: `300px`
 
 ### ToggleButton
 L.Control.ToggleButton | L.control.toggleButton
@@ -35,16 +35,16 @@ know if it is on or off and, if provided, calls the
 callback every time it is clicked.
 
 Options:
-* callback: `function` to call on click
-* callbackTarget: will be passed to callback as first
+* **callback**: `function` to call on click
+* **callbackTarget**: will be passed to callback as first
     argument.
-* position: Leaflet position string. Default: `topright`
-* initialValue: boolean, default: `true`
-* icon: string indicating which [FontAwesome](http://fontawesome.io/)
+* **position**: Leaflet position string. Default: `topright`
+* **initialValue**: boolean, default: `true`
+* **icon**: string indicating which [FontAwesome](http://fontawesome.io/)
     icon to use. Default: `podcast`
-* colorOn: string representing hex color. Default: `#337AB7`
-* colorOff: string representing hex color. Default: `#5F7C8A`
-* title: string to show on hover. Default: `Toggle Layer`
+* **colorOn**: string representing hex color. Default: `#337AB7`
+* **colorOff**: string representing hex color. Default: `#5F7C8A`
+* **title**: string to show on hover. Default: `Toggle Layer`
 
 ### Control.Layers.ST
 L.Control.Layers.ST | L.control.layers.st
@@ -53,11 +53,11 @@ Like L.Control.Layers, but it adds a checkbox at the top
 which turns all layers on/off. 
 
 Options:
-* position: Leaflet position string. Default: `topright`
-* icon: string indicating which [FontAwesome](http://fontawesome.io/)
+* **position**: Leaflet position string. Default: `topright`
+* **icon**: string indicating which [FontAwesome](http://fontawesome.io/)
     icon to use. Default: `podcast`
-* color: string representing hex color. Default: `#337AB7`
-* allText: string to show on checkbox. 
+* **color**: string representing hex color. Default: `#337AB7`
+* **allText**: string to show on checkbox. 
     Default: `Todos`
 
 Methods:
@@ -72,13 +72,13 @@ Retrieves all active incidents from server and creates
 a layer for each category received.
 
 Options:
-* apiKey: your key for SinTráfico's API 
-* callback: `function(array)` to receive incident objects
-* imgPath: path to images. Default 
+* **apiKey**: your key for SinTráfico's API 
+* **callback**: `function(array)` to receive incident objects
+* **imgPath**: path to images. Default 
     `'http://s3.amazonaws.com/sintrafico/images/'`
-* initialVisibility: if `true`, layers will be added
+* **initialVisibility**: if `true`, layers will be added
     to the map as soon as they are received.
-* tableDiv: if provided, a table will be created and
+* **tableDiv**: if provided, a table will be created and
     placed in that div. When a row is clicked, the map
     will be centered to the incident's location
 * All [Control.Layers.ST](#controllayersst) options
