@@ -85,3 +85,15 @@ Options:
 
 ### L.Control.Layers.STPois
 L.Control.Layers.STPois | L.control.layers.stPois
+
+Child of [Control.Layers.ST](#controllayersst). 
+Retrieves all POIs from server and creates
+a layer for each type received.
+
+Options:
+* **apiKey**: your key for SinTráfico's API 
+* **imgPath**: path to images. Default 
+    `'node_modules/stmap/img/icons/'`
+* **initialVisibility**: if `true`, layers will be added
+    to the map as soon as they are received.
+* All [Control.Layers.ST](#controllayersst) options
