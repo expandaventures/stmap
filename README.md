@@ -9,11 +9,28 @@ Uses [FontAwesome](http://fontawesome.io/) icons.
 ``` 
 
 ## Layers
-### L.STHeat | L.stHeat
+### Heat
+L.STHeat | L.stHeat
+
+Heat layer.
+
+Options:
+* **apiKey**: your key for SinTráfico's API 
+* **visible**: if `true` layer will be added to map as 
+    soon as it is ready
+* **callback**: `function` to call on button click
+* **callbackTarget**: will be passed to callback as first
+* **url**: where to retrieve data for layer from
+* **opacity**: decimal in range [0, 1]
+* **imgSrc**: for legend
+* **legendPosition**: default `'bottomright'`
+* **buttonPosition**: default: `'topright'`
+* All [ToggleButton](#togglebutton) options
+
 ### L.STWMS | L.stWMS
 ### L.STMunicipalities | L.stMunicipalities
 ### L.stLayer
-   Function that returns either `L.STWMS` or `L.STHeat` 
+   Function that returns either `L.STWMS` or [L.STHeat](#heat) 
    based on the URL provided in options. 
 
 ## Controls
