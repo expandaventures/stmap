@@ -18,8 +18,9 @@ Options:
 * **apiKey**: your key for SinTráfico's API 
 * **visible**: if `true` layer will be added to map as 
     soon as it is ready
-* **callback**: `function(callbackTarget, visible)` to call on button click
+* **callback**: `function(object callbackTarget, bool visible)` to call on button click
 * **callbackTarget**: will be passed to callback as first
+    argument.
 * **url**: where to retrieve data for layer from
 * **opacity**: decimal in range [0, 1]
 * **imgSrc**: for legend
@@ -41,8 +42,9 @@ Options:
 * **apiKey**: your key for SinTráfico's API 
 * **visible**: if `true` layer will be added to map as 
     soon as it is ready
-* **callback**: `function(callbackTarget, visible)` to call on button click
+* **callback**: `function(object callbackTarget, bool visible)` to call on button click
 * **callbackTarget**: will be passed to callback as first
+    argument.
 * **imgSrc**: for legend
 * **legendPosition**: default `'bottomright'`
 * **buttonPosition**: default: `'topright'`
@@ -72,7 +74,7 @@ know if it is on or off and, if provided, calls the
 callback every time it is clicked.
 
 Options:
-* **callback**: `function(callbackTarget, visible)` to call on click
+* **callback**: `function(object callbackTarget, bool visible)` to call on click
 * **callbackTarget**: will be passed to callback as first
     argument.
 * **position**: Leaflet position string. Default: `topright`
