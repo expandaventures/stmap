@@ -50,7 +50,19 @@ Options:
 * **buttonPosition**: default: `'topright'`
 * All [ToggleButton](#togglebutton) options except position
 
-### L.STMunicipalities | L.stMunicipalities
+### STMunicipalities
+L.STMunicipalities | L.stMunicipalities
+
+Show polygons of Mexico's municipalities
+
+Options: 
+* **visible**: if `true` layer will be added to map as 
+    soon as it is ready
+* **buttonPosition**: default: `'topright'`
+* **icon**: default: `map`
+* **title**: default: `'Municipios'`
+* All other [ToggleButton](#togglebutton) options
+
 ### L.stLayer
    Function that returns either `L.STWMS` or [L.STHeat](#heat) 
    based on the URL provided in options. 
