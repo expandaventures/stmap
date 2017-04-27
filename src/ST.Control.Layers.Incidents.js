@@ -37,6 +37,12 @@ L.Control.Layers.STIncidents = Layers.extend({
         return container;
     },
 
+    refresh: function () {
+        if (this._map) {
+            this._getIncidents();
+        }
+    },
+
     city: function (lat, lon) {
         var limits = {
             "cdmx": {"lat": {"min": 19.08, "max": 19.84},
