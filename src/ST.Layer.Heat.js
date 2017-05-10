@@ -110,7 +110,7 @@ L.STHeat = L.Layer.extend({
     },
 
     _radius: function (zoom) {
-        if (zoom > 11)
+        if (zoom >= 11)
             return 5.8333 * zoom - 64.167;
         return 1
     },
