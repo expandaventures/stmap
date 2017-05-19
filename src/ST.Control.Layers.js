@@ -13,6 +13,7 @@ L.Control.Layers.ST = L.Control.Layers.extend({
         icon: 'podcast',
         color: '#5F7C8A',
         allText: 'Todos',
+        stopClickPropagation: true,
     },
 
     initialize: function (baseLayers, overlays, options) {
@@ -29,6 +30,9 @@ L.Control.Layers.ST = L.Control.Layers.extend({
                                             this.options.icon + '"></span>' +
                                             '<span class="fa fa-caret-down"></span>';
                                             '</center>';
+		if (this.options.stopClickPropagation) {
+            L.DomEvent.disableClickPropagation(container);
+        }
         return container;
     },
 
