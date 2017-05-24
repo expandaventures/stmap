@@ -19,6 +19,7 @@ L.Control.ToggleButton = L.Control.extend({
         colorOn: '#337AB7',
         colorOff: '#5F7C8A',
         title: 'Toggle Layer',
+        stopClickPropagation: true,
     },
 
     initialize: function (options) {
@@ -46,6 +47,9 @@ L.Control.ToggleButton = L.Control.extend({
         container.callbackTarget = this.options.callbackTarget;
         container.colorOn = this.options.colorOn;
         container.colorOff = this.options.colorOff;
+        if (this.options.stopClickPropagation) {
+            L.DomEvent.disableClickPropagation(container);
+        }
 
         return container;
     },
