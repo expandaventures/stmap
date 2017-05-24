@@ -20,6 +20,7 @@ L.STHeat = L.Layer.extend({
         // layer
         url: null,
         opacity: 0.6,
+        radius_func: this._radius,
         // ST.Control.Legend
         //     imgSrc: null,
         legendPosition: 'bottomright',
@@ -41,7 +42,7 @@ L.STHeat = L.Layer.extend({
             url: this.options.url + keyParam,
             opacity: this.options.opacity,
             parseResponse: this._parseResponse,
-            radius_func: this._radius,
+            radius_func: this.options.radius_func,
         });
         this._legend = legend({imgSrc: this.options.imgSrc, position: this.options.legendPosition});
         this._button = toggleButton(this._buttonOptions(options));
