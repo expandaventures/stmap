@@ -18,7 +18,7 @@ L.STHeat = L.Layer.extend({
         callback: null,
         callbackTarget: null,
         // layer
-        url: null,
+        url: null, 
         opacity: 0.6,
         radius_func: this._radius,
         loadingCallback: null, // function(loading), loading is true when starting, false when finished
