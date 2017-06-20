@@ -71,7 +71,7 @@ L.STWMS = L.Layer.extend({
 
     _updateImageLayer: function (map) {
         var _callback = this.options.loadingCallback;
-        if (_callback)
+        if (_callback && this._visible)
             _callback(true);
         if(this._layer != null && map.hasLayer(this._layer))
             map.removeLayer(this._layer);
