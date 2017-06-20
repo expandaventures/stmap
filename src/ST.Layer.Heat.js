@@ -21,6 +21,7 @@ L.STHeat = L.Layer.extend({
         url: null,
         opacity: 0.6,
         radius_func: this._radius,
+        loadingCallback: null, // function(loading), loading is true when starting, false when finished
         // ST.Control.Legend
         //     imgSrc: null,
         legendPosition: 'bottomright',
@@ -43,6 +44,7 @@ L.STHeat = L.Layer.extend({
             opacity: this.options.opacity,
             parseResponse: this._parseResponse,
             radius_func: this.options.radius_func,
+            loadingCallback: this.options.loadingCallback,
         });
         this._legend = legend({imgSrc: this.options.imgSrc, position: this.options.legendPosition});
         this._button = toggleButton(this._buttonOptions(options));
