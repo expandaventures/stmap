@@ -13,6 +13,7 @@ L.stLayer = function(options) {
     //         visible: true,
     //         callback: null,
     //         callbackTarget: null,
+    //         loadingCallback: null, // function(loading), loading is true when starting, false when finished
     //     layer
     //         opacity: 0.6,
     //     ST.Control.Legend

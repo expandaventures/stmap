@@ -19,6 +19,7 @@ L.STWMS = L.Layer.extend({
         visible: true,
         callback: null,
         callbackTarget: null,
+        loadingCallback: null, // function(loading), loading is true when starting, false when finished
         // ST.Control.Legend
         //     imgSrc: null,
         legendPosition: 'bottomright',
@@ -69,6 +70,9 @@ L.STWMS = L.Layer.extend({
     },
 
     _updateImageLayer: function (map) {
+        var _callback = this.options.loadingCallback;
+        if (_callback)
+            _callback(true);
         if(this._layer != null && map.hasLayer(this._layer))
             map.removeLayer(this._layer);
         var c = map.getContainer();
@@ -81,6 +85,10 @@ L.STWMS = L.Layer.extend({
                              '&width=' + c.offsetWidth +
                              '&key=' + this.options.apiKey;
         this._layer = L.imageOverlay(imageUrl, map.getBounds());
+        this._layer.on('load', function() {
+            if (_callback)
+                _callback(false);
+        });
         if (this._visible)
             this._layer.addTo(map);
     },
