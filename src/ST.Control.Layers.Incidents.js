@@ -73,7 +73,7 @@ L.Control.Layers.STIncidents = Layers.extend({
         var params = {
           'apiKey': this.options.apiKey,
           'ps[]': 3,
-          cities: `${(this.options.cities?this.options.cities:1)}`
+          cities: `[${(this.options.cities?this.options.cities:1)}]`
         };
         $.getJSON(url, params)
             .done(L.bind(this._receiveIncidents, this))
