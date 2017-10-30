@@ -69,8 +69,12 @@ L.Control.Layers.STIncidents = Layers.extend({
     },
 
     _getIncidents: function () {
-        var url = 'http://text.sintrafico.com/reports/active';
-        var params = {'apiKey': this.options.apiKey};
+        var url = 'https://api.sintrafico.com/st/pois';
+        var params = {
+          'apiKey': this.options.apiKey,
+          'ps[]': 3,
+          cities: `${(this.options.cities?this.options.cities:1)}`
+        };
         $.getJSON(url, params)
             .done(L.bind(this._receiveIncidents, this))
             .fail(function(jqXHR, textStatus, errorThrown) {

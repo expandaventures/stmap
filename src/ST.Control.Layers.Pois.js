@@ -51,7 +51,7 @@ L.Control.Layers.STPois = Layers.extend({
         var SW = bounds.getSouthWest();
         var NE = bounds.getNorthEast();
         var boundsParam = SW.lat + ',' + SW.lng + ',' + NE.lat + ',' + NE.lng;
-        var url = 'http://api.sintrafico.com/st/pois';
+        var url = 'https://api.sintrafico.com/st/pois';
         var params = {"apiKey": this.options.apiKey, "ps[]": [0, 1, 2], bounds: boundsParam};
         $.getJSON(url, params)
             .done(L.bind(this._receivePois, this))
