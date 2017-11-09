@@ -1,6 +1,7 @@
 'use strict';
 var {wms} = require('./ST.Layer.WMS.js')
 var {heat} = require('./ST.Layer.Heat.js')
+var {traffic} = require('./ST.Layer.Traffic.js')
 
 L.stLayer = function(options) {
     // options: {
@@ -30,6 +31,9 @@ L.stLayer = function(options) {
     // },
     if (options.url.includes('wms')) {
         return wms(options);
+    }
+    if (options.url.includes('traffic')){
+        return traffic(options);
     }
     else {
         return heat(options);
