@@ -18,37 +18,37 @@ var counter = 0;
             },
 
         createTile: function(coords){
-                // create a <canvas> element for drawing
-                var tile = L.DomUtil.create('canvas', 'leaflet-tile');
-                // setup tile width and height according to the options
-                var size = this.getTileSize();
-                tile.width = size.x;
-                tile.height = size.y;
-                // get a canvas context and draw something on it using coords.x, coords.y and coords.z
-                var ctx = tile.getContext('2d');
-                // return the tile so it can be rendered on screen
-                var counter = 0;
-                var this_ = this;
-                // do all the request and push them into a stack, in order to track them 
-                this._request.push(
-                    $.get( L.Util.template(this._url, coords) )
-                        .done(function( data ) {
-                            var geojson = L.topojson.feature(data, data.objects.name);
-                            var layer = L.geoJSON(geojson);
-                            // keep the reference of each layer 
-                            this_._geoJsonLayers.push(layer);
-                            // color each segment 
-                            layer.addTo(map).eachLayer(function (layer) {
-                                road_colors(layer);
-                        });
+            var _this = this;
+            // create a <canvas> element for drawing
+            var tile = L.DomUtil.create('canvas', 'leaflet-tile');
+            // setup tile width and height according to the options
+            var size = this.getTileSize();
+            tile.width = size.x;
+            tile.height = size.y;
+            // get a canvas context and draw something on it using coords.x, coords.y and coords.z
+            var ctx = tile.getContext('2d');
+            // return the tile so it can be rendered on screen
+            var counter = 0;
+            var this_ = this;
+            // do all the request and push them into a stack, in order to track them 
+            this._request.push(
+                $.get( L.Util.template(this._url, coords) )
+                    .done(function( data ) {
+                        var geojson = L.topojson.feature(data, data.objects.name);
+                        var layer = L.geoJSON(geojson);
+                        // keep the reference of each layer 
+                        this_._geoJsonLayers.push(layer);
+                        // color each segment 
+                        layer.addTo(_this._map).eachLayer(function (layer) {
+                            road_colors(layer); });
                     })
                 );
-                return tile;
-            }
-        });
+            return tile;
+        }
+    });
 
-        L.geoJsonGridLayer = function(url, options) {
-            return new L.GeoJSONGridLayer(url, options);
+    L.geoJsonGridLayer = function(url, options) {
+        return new L.GeoJSONGridLayer(url, options);
         };
     }
 
