@@ -12,11 +12,20 @@ var counter = 0;
         initialize: function (url, options) {
             L.GridLayer.prototype.initialize.call(this);
             this._url = url;
-            this._geoJsonLayers = [];
+            this._geoJSON = L.geoJSON();
+            this._active = false;
             this._request = [];
             this._typeSpeed = options.type_speed;
             },
-
+        onAdd: function () {
+            this._initContainer();
+            this._levels = {};
+            this._tiles = {};
+            this._resetView();
+            this._update();
+            this._active = true;
+            if(! this._map.hasLayer(this._geoJSON )) this._geoJSON.addTo(this._map)
+        },
         createTile: function(coords){
             var _this = this;
             // create a <canvas> element for drawing
@@ -31,18 +40,19 @@ var counter = 0;
             var counter = 0;
             var this_ = this;
             // do all the request and push them into a stack, in order to track them 
-            this._request.push(
-                $.get( L.Util.template(this._url, coords) )
-                    .done(function( data ) {
-                        var geojson = L.topojson.feature(data, data.objects.name);
-                        var layer = L.geoJSON(geojson);
-                        // keep the reference of each layer 
-                        this_._geoJsonLayers.push(layer);
-                        // color each segment 
-                        layer.addTo(_this._map).eachLayer(function (layer) {
-                            road_colors(layer); });
-                    })
-                );
+            _this._request.push( {
+                request : $.get( L.Util.template(this._url, coords) )
+                            .done(function( data ) {
+                                data.forEach(function(x){
+                                    if(x.coordinates){
+                                        _this._geoJSON.addData(x);
+                                    }
+                                    _this._geoJSON.eachLayer(function(y) { y.setStyle({ color: y.feature.geometry.properties })});
+                                })
+                        }), 
+                zoom : coords.z
+            }
+            );
             return tile;
         }
     });
@@ -64,14 +74,3 @@ var counter = 0;
     }
 
 })();
-
-function road_colors(layer){
-    var speedColors = ["green", "yellow", "red", "brown", "black"]
-    layer.setStyle( { color: speedColors[Math.floor(Math.random() * speedColors.length)]} )
-    // if (layer.feature.properties.speed < 30){
-    //     layer.setStyle( { color: "red"} ) 
-    // }else{
-    //      
-    // }
-
-}

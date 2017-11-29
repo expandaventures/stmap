@@ -32,7 +32,7 @@ L.stLayer = function(options) {
     if (options.url.includes('wms')) {
         return wms(options);
     }
-    if (options.url.includes('traffic')){
+    if (options.url.includes('tile')){
         return traffic(options);
     }
     else {

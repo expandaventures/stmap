@@ -1,5 +1,5 @@
 'use strict';
-require('./ST.TopojsonClient.js')
+require('./ST.GeojsonGridLayer.js')
 var {legend} = require('./ST.Control.Legend.js')
 var {toggleButton} = require('./ST.Control.ToggleButton.js')
 
@@ -51,14 +51,13 @@ L.STTraffic = L.Layer.extend({
     },
 
     _hide: function (me) {
-        // map.removeLayer(this._layer);
         me._map.eachLayer(function(layer){ 
-            if(layer._typeSpeed === me._typeSpeed && layer._geoJsonLayers) {
-                layer._geoJsonLayers.forEach( function(segment){ console.log(""); me._map.removeLayer(segment); });                    
-                if (layer._request) {
-                    layer._request.forEach( function(xhr){ xhr.abort() })
-                }
-                me._map.removeLayer(layer);
+            if(layer._typeSpeed === me._typeSpeed && layer._active ) {
+                typeof layer._geoJSON != "undefined" && layer._geoJSON.eachLayer(function(segment){ me._map.removeLayer(segment); });
+                me._map.removeLayer(layer);     
+            }
+            if(layer._request){
+                layer._request.forEach( function(x){x.request.abort()})
             }
         });
         me._map.removeControl(this._legend);
