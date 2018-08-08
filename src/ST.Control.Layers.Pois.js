@@ -19,6 +19,9 @@ L.Control.Layers.STPois = Layers.extend({
         //     icon: 'podcast',
         //     color: '#5F7C8A',
         //     allText: 'Todos',
+        view_type: 'bounds', //options 'bounds' || 'radius'
+        cluster: true,
+        callback: false,
     },
 
     initialize: function (options) {
@@ -31,15 +34,19 @@ L.Control.Layers.STPois = Layers.extend({
     },
 
     onAdd: function (map) {
-        var container = Layers.prototype.onAdd.call(this, map);
         this._clusters = {};
-        this._getPois(map);  // call after this._map has been set
-        map.on('dragend zoomend', L.bind(this.update, this));
+        this._getPois(this._map);  // call after this._map has been set
+        var container = Layers.prototype.onAdd.call(this, map);
+        if(this.options.view_type == 'bounds') {
+          map.on('dragend zoomend', L.bind(this.update, this));
+        }
         return container;
     },
 
     onRemove: function (map) {
+      if(this.options.view_type == 'bounds') {
         map.off('dragend zoomend', L.bind(this.update, this));
+      }
     },
 
     update: function () {
@@ -47,56 +54,123 @@ L.Control.Layers.STPois = Layers.extend({
     },
 
     _getPois: function (map) {
-        var bounds = map.getBounds();
-        var SW = bounds.getSouthWest();
-        var NE = bounds.getNorthEast();
-        var boundsParam = SW.lat + ',' + SW.lng + ',' + NE.lat + ',' + NE.lng;
-        var url = 'https://api.sintrafico.com/st/pois';
-        var params = {"apiKey": this.options.apiKey, "ps[]": [0, 1, 2], bounds: boundsParam};
-        $.getJSON(url, params)
-            .done(L.bind(this._receivePois, this))
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.status);
-                console.log(errorThrown);
-            });
+        let _this = this;
+        let url = 'https://api.sintrafico.com/st/pois?',
+        // let url = 'http://localhost:5000/st/pois?',
+            params = {"apiKey": this.options.apiKey, "ps[]":[0, 1, 2]};
+        if(this.options.view_type == 'radius') {
+            params.location = `${this.options.latitude},${this.options.longitude}`;
+            params.radius = this.options.radius;
+        } else {
+            let bounds = map.getBounds(),
+                SW = bounds.getSouthWest(),
+                NE = bounds.getNorthEast();
+            params.bounds = `${SW.lat},${SW.lng},${NE.lat},${NE.lng}`;
+        }
+        let urlParams = this._buildParams(params),
+            rq = `${url}${urlParams}`;
+        fetch(rq)
+          .then(response => {
+            if (_this.options.callback) {
+              (_this.options.callback)(response.json());
+            }
+            this._receivePois(response.json());
+          })
+          .catch(err  => {console.log(err)})
+    },
+
+    _buildParams: function(params) {
+      let params_string = '';
+      Object.keys(params).map(key => {
+        if (params[key] && typeof params[key] == 'object') {
+          params[key].map(value => {params_string += `${key}=${value}&`})
+        } else {
+          params_string += `${key}=${params[key]}&`;
+        }
+      })
+      return params_string;
     },
 
     _receivePois: function (data) {
-        for (var _poiType in data) {
-            var poiType = this._layerName(_poiType);
-            var cluster = L.markerClusterGroup({
-                iconCreateFunction: function(cluster) {
-                    return L.divIcon({
-                        className: 'st-poi-cluster',
-                        iconSize: L.point(50, 70),
-                        html: cluster.getChildCount() + this.imgSrc
-                    });
-                },
-                imgSrc: '<img src=' + this._iconPath(poiType) +' />'
-            });
-            var markers = data[_poiType].map((poi, index) => {
-                var icon = L.icon({iconUrl: this._iconPath(_poiType, poi)});
-                var marker = L.marker(L.latLng(poi.location[1], poi.location[0]), {icon: icon});
-                cluster.addLayer(marker);
-            });
-            var visible = poiType in this._clusters && this._map.hasLayer(this._clusters[poiType]);
-            if (poiType in this._clusters) {
-                // Exists, must replace
-                if (this._map.hasLayer(this._clusters[poiType])) {
-                    this._map.removeLayer(this._clusters[poiType]);
-                    cluster.addTo(this._map);
-                }
-                this.removeLayer(this._clusters[poiType]);
-                this.addOverlay(cluster, poiType);
-            }
-            else {
-                // First time adding
-                if (this.options.initialVisibility)
-                    cluster.addTo(this._map);  // This turns all layers on by default
-                this.addOverlay(cluster, poiType);
-            }
-            this._clusters[poiType] = cluster;
+        let cluster = this.options.cluster;
+        for(let type in data) {
+          let poiType = this._layerName(type),
+              markers = !cluster?L.layerGroup():L.markerClusterGroup({
+              iconCreateFunction: (cluster) => {
+                  return L.divIcon({
+                      className: 'st-poi-cluster',
+                      iconSize: L.point(50, 70),
+                      html: cluster.getChildCount() + this.imgSrc
+                  });
+              },
+              imgSrc: `<img src='${this._iconPath(poiType)}'/>`
+          });
+          data[type].map((poi, index) => {
+            let icon = L.icon({iconUrl: this._iconPath(type, poi)}),
+                ll = L.latLng(poi.location[1], poi.location[0]),
+                marker = L.marker(ll, {icon: icon});
+            markers.addLayer(marker);
+          });
+          let initialVisible = this.options.initialVisibility,
+              exists = this._map.hasLayer(markers);
+          if (exists) {
+            this._map.removeLayer(markers);
+            markers.addTo(this._map);
+          } else if(initialVisible) {
+            markers.addTo(this._map);
+          }
         }
+
+        // let noCluster = L.layerGroup(); //Made for radius option (when not shown as cluster)
+        // for (var _poiType in data) {
+        //     var poiType = this._layerName(_poiType);
+        //     var cluster = L.markerClusterGroup({
+        //         iconCreateFunction: function(cluster) {
+        //             return L.divIcon({
+        //                 className: 'st-poi-cluster',
+        //                 iconSize: L.point(50, 70),
+        //                 html: cluster.getChildCount() + this.imgSrc
+        //             });
+        //         },
+        //         imgSrc: '<img src=' + this._iconPath(poiType) +' />'
+        //     });
+        //     var markers = data[_poiType].map((poi, index) => {
+        //         var icon = L.icon({iconUrl: this._iconPath(_poiType, poi)});
+        //         var marker = L.marker(L.latLng(poi.location[1], poi.location[0]), {icon: icon});
+        //         if(this.options.view_type == 'radius'){
+        //             noCluster.addLayer(marker);
+        //         }else{
+        //             cluster.addLayer(marker);
+        //         }
+        //     });
+        //     var visible = poiType in this._clusters && this._map.hasLayer(this._clusters[poiType]);
+        //     if (poiType in this._clusters) {
+        //         // Exists, must replace
+        //         if (this._map.hasLayer(this._clusters[poiType])) {
+        //             this._map.removeLayer(this._clusters[poiType]);
+        //             cluster.addTo(this._map);
+        //         }
+        //         this.removeLayer(this._clusters[poiType]);
+        //         if (this.options.control) {
+        //             this.addOverlay(cluster, poiType);
+        //         }
+        //     } else {
+        //         // First time adding
+        //         if (this.options.initialVisibility)
+        //             cluster.addTo(this._map);  // This turns all layers on by default
+        //         if (this.options.control) {
+        //             this.addOverlay(cluster, poiType);
+        //         }
+        //     }
+        //     this._clusters[poiType] = cluster;
+        // }
+        // if(this.options.view_type == 'radius'){
+        //     noCluster.addTo(this._map);
+        // }
+    },
+
+    _receivePlaces: function(data) {
+      console.log(data);
     },
 
     _iconPath: function (poiType, poi) {
