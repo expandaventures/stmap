@@ -5,7 +5,7 @@ var gulp = require('gulp'),
     debug = require('gulp-debug'),
     jshint = require("gulp-jshint"),
     rename = require('gulp-rename'),
-    uglify = require('gulp-uglify');
+    minify = require('gulp-minify');
 
 
 var sourceDir = 'src/*.js';
@@ -14,7 +14,22 @@ gulp.task('bundle', function() {
                .pipe(concat('stmap.js'))
                .pipe(browserify())
                .pipe(babel({presets: ['es2015']}))
-               .pipe(uglify())
                .pipe(rename({suffix: '.min'}))
                .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('compress-js', function() {
+    return gulp.src('dist/stmap.js')
+        .pipe(minify())
+        .pipe(gulp.dest('dist/'));
+    });
+
+gulp.task('change-name', function(){
+    return gulp.src('dist/stmap-min.js')
+        .pipe(rename('stmap.min.js'))//substitute hyphen, with dot
+        .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('build', ['bundle', 'compress-js', 'change-name'], function() {
+    console.log('Finish building js and css')
 });
