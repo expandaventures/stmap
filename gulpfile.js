@@ -26,10 +26,10 @@ gulp.task('compress-js', function() {
 
 gulp.task('change-name', function(){
     return gulp.src('dist/stmap-min.js')
-        .pipe(rename('stmap.min.js'))//substitute hyphen, with dot 
+        .pipe(rename('stmap.min.js'))//substitute hyphen, with dot
         .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('build', ['compress-js', 'bundle', 'change-name'], function() {
+gulp.task('build', ['bundle', 'compress-js', 'change-name'], function() {
     console.log('Finish building js and css')
 });

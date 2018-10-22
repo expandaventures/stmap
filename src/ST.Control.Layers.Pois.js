@@ -67,28 +67,17 @@ L.Control.Layers.STPois = Layers.extend({
                 NE = bounds.getNorthEast();
             params.bounds = `${SW.lat},${SW.lng},${NE.lat},${NE.lng}`;
         }
-        let urlParams = this._buildParams(params),
-            rq = `${url}${urlParams}`;
-        fetch(rq)
-          .then(response => {
-            if (_this.options.callback) {
-              (_this.options.callback)(response.json());
-            }
-            this._receivePois(response.json());
-          })
-          .catch(err  => {console.log(err)})
-    },
-
-    _buildParams: function(params) {
-      let params_string = '';
-      Object.keys(params).map(key => {
-        if (params[key] && typeof params[key] == 'object') {
-          params[key].map(value => {params_string += `${key}=${value}&`})
-        } else {
-          params_string += `${key}=${params[key]}&`;
-        }
-      })
-      return params_string;
+        $.getJSON(url, params)
+            .done(response => {
+              if (_this.options.callback) {
+                (_this.options.callback)(response)
+              }
+              _this._receivePois(response)
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.status);
+                console.log(errorThrown);
+            });
     },
 
     _receivePois: function (data) {
